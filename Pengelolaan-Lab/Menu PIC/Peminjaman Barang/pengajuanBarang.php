@@ -1,11 +1,12 @@
 <?php
-require_once __DIR__ . '/../../auth.php';
+require_once '../../auth.php';
 authorize_role('PIC Aset');
+
 include '../../templates/header.php';
 include '../../koneksi.php';
 
 $idPeminjamanBrg = $_GET['id'] ?? '';
-$data = []; // Inisialisasi $data sebagai array kosong
+$data = null; // Inisialisasi $data sebagai null
 $error = '';
 $showModal = false;
 
@@ -24,7 +25,7 @@ if (!empty($idPeminjamanBrg)) {
             LEFT JOIN
                 Karyawan k ON pb.npk = k.npk
             WHERE
-                pb.idPeminjamanBrg = ?";          
+                pb.idPeminjamanBrg = ?";
     $params = array($idPeminjamanBrg);
     $stmt = sqlsrv_query($conn, $query, $params);
 
@@ -49,19 +50,7 @@ if (!empty($idPeminjamanBrg)) {
     $error = "ID Peminjaman tidak valid.";
 }
 
-// Pastikan semua variabel diinisialisasi SETELAH mencoba mengambil data
-// Gunakan operator null coalescing (??) untuk default nilai kosong jika $data tidak memiliki kunci
-$idBarang = $data['idBarang'] ?? '';
-$nim = $data['nim'] ?? '';
-$npk = $data['npk'] ?? '';
-$namaBarang = $data['namaBarang'] ?? '';
-$namaPeminjam = $data['namaPeminjam'] ?? '';
-$tglPeminjamanBrg = isset($data['tglPeminjamanBrg']) ? $data['tglPeminjamanBrg']->format('Y-m-d') : '';
-$jumlahBrg = $data['jumlahBrg'] ?? '';
-$alasanPeminjamanBrg = $data['alasanPeminjamanBrg'] ?? '';
-$statusPeminjaman = $data['statusPeminjaman'] ?? '';
-
-// Proses form untuk menyetujui peminjaman (tetap seperti sebelumnya, sudah benar)
+// Proses form untuk menyetujui peminjaman 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     if (!empty($idPeminjamanBrg)) {
         sqlsrv_begin_transaction($conn);
@@ -75,9 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         if ($stmtUpdate) {
             sqlsrv_commit($conn);
             $showModal = true;
-            // Penting: Setelah sukses, Anda mungkin perlu memuat ulang data atau mengarahkan pengguna
-            // Tapi untuk modal di halaman yang sama, ini sudah cukup.
-            // Data di form akan terlihat berubah setelah refresh atau redirect.
         } else {
             sqlsrv_rollback($conn);
             $errors = sqlsrv_errors();
@@ -97,12 +83,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 include '../../templates/sidebar.php';
 ?>
 <main class="col bg-white px-4 py-3 position-relative">
+    <h3 class="fw-semibold mb-3">Peminjaman Barang</h3>
     <div class="mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu PIC/dashboardPIC.php">Sistem Pengelolaan Lab</a></li>
                 <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu PIC/Peminjaman Barang/peminjamanBarang.php">Peminjaman Barang</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Pengajuan Barang</li>
+                <li class="breadcrumb-item active" aria-current="page">Pengajuan Peminjaman Barang</li>
             </ol>
         </nav>
     </div>
@@ -112,114 +99,83 @@ include '../../templates/sidebar.php';
             <div class="col-md-8 col-lg-12" style="margin-right: 20px;">
                 <div class="card border border-dark">
                     <div class="card-header bg-white border-bottom border-dark">
-                        <span class="fw-semibold">Pengajuan Peminjaman Barang</span>
+                        <span class="fw-bold">Pengajuan Peminjaman Barang</span>
                     </div>
                     <div class="card-body">
                         <form method="POST">
                             <input type="hidden" name="idPeminjamanBrg" value="<?= htmlspecialchars($idPeminjamanBrg) ?>">
                             <div class="row">
 
-                    <!-- Kolom Kiri -->
-                    <div class="col-md-6">
-                        <div class="mb-2">
-                           <label for="idBarang" class="form-label fw-bold">ID Barang</label>
-                                <div class="form-control-plaintext"><?= htmlspecialchars($idBarang) ?></div>
-                                <input type="hidden" class="form-control" id="idBarang" name="idBarang" value="<?= htmlspecialchars($idBarang) ?>">
-                        </div>
-                        <div class="mb-2">
-                            <label for="tglPeminjamanBrg" class="form-label fw-bold">Tanggal Peminjaman</label>
-                                <div class="form-control-plaintext"><?= htmlspecialchars($tglPeminjamanBrg) ?></div>
-                                <input type="hidden" class="form-control" id="tglPeminjamanBrg" name="tglPeminjamanBrg" value="<?= htmlspecialchars($tglPeminjamanBrg) ?>">
-                        </div>                       
-                        <div class="mb-2">
-                            <label class="form-label fw-bold">NIM / NPK</label>
-                                <div class="form-control-plaintext">
-                                    <?php
-                                        if (!empty($nim)) {
-                                            echo htmlspecialchars($nim);
-                                        } elseif (!empty($npk)) {
-                                            echo htmlspecialchars($npk);
-                                        } else {
-                                             echo "-";
-                                        }
-                                    ?>
+                                <!-- Kolom Kiri -->
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <label for="idPeminjamanBrg" class="form-label fw-semibold">ID Peminjaman</label>
+                                        <div class="form-control-plaintext"><?= htmlspecialchars($data['idPeminjamanBrg'] ?? '') ?></div>
+                                        <input type="hidden" class="form-control" id="idPeminjamanBrg" name="idPeminjamanBrg" value="<?= htmlspecialchars($data['idPeminjamanBrg'] ?? '') ?>">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="tglPeminjamanBrg" class="form-label fw-semibold">Tanggal Peminjaman</label>
+                                        <div class="form-control-plaintext"><?= isset($data['tglPeminjamanBrg']) ? htmlspecialchars($data['tglPeminjamanBrg']->format('Y-m-d')) : '' ?></div>
+                                        <input type="hidden" class="form-control" id="tglPeminjamanBrg" name="tglPeminjamanBrg" value="<?= isset($data['tglPeminjamanBrg']) ? htmlspecialchars($data['tglPeminjamanBrg']->format('Y-m-d')) : '' ?>">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label fw-semibold">NIM / NPK</label>
+                                        <div class="form-control-plaintext">
+                                            <?php
+                                            if (!empty($data['nim'])) {
+                                                echo htmlspecialchars($data['nim']);
+                                            } elseif (!empty($data['npk'])) {
+                                                echo htmlspecialchars($data['npk']);
+                                            } else {
+                                                echo "-";
+                                            }
+                                            ?>
+                                        </div>
+                                        <input type="hidden" class="form-control" id="nim" name="nim" value="<?= htmlspecialchars($data['nim'] ?? '') ?>">
+                                        <input type="hidden" class="form-control" id="npk" name="npk" value="<?= htmlspecialchars($data['npk'] ?? '') ?>">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="alasanPeminjamanBrg" class="form-label fw-semibold">Alasan Peminjaman</label>
+                                        <div class="form-control-plaintext"><?= nl2br(htmlspecialchars($data['alasanPeminjamanBrg'] ?? '')) ?></div>
+                                    </div>
                                 </div>
-                            <input type="hidden" class="form-control" id="nim" name="nim" value="<?= htmlspecialchars($nim) ?>">
-                            <input type="hidden" class="form-control" id="npk" name="npk" value="<?= htmlspecialchars($npk) ?>">
-                        </div>
-                        <div class="mb-2">
-                            <label for="alasanPeminjamanBrg" class="form-label fw-bold">Alasan Peminjaman</label>
-                                <div class="form-control-plaintext"><?= nl2br(htmlspecialchars($alasanPeminjamanBrg)) ?></div>
-                        </div>                       
-                    </div>
 
-                    <!-- Kolom Kanan -->
-                    <div class="col-md-6">
-                        <div class="mb-2">         
-                          <label for="idPeminjamanBrg" class="form-label fw-bold">ID Peminjaman Barang</label>
-                                <div class="form-control-plaintext"><?= htmlspecialchars($idPeminjamanBrg) ?></div>
-                                <input type="hidden" class="form-control" id="idPeminjamanBrg" name="idPeminjamanBrg" value="<?= htmlspecialchars($idPeminjamanBrg) ?>">
-                        </div>
-                    <div class="mb-2">         
-                          <label for="namaBarang" class="form-label fw-bold">Nama Barang</label>
-                            <div class="form-control-plaintext"><?= htmlspecialchars($namaBarang) ?></div>
-                            <input type="hidden" class="form-control" id="namaBarang" name="namaBarang" value="<?= htmlspecialchars($namaBarang) ?>">
-                        </div>
-                    <div class="mb-2">         
-                          <label for="namaPeminjam" class="form-label fw-bold">Nama Peminjam</label>
-                            <div class="form-control-plaintext"><?= htmlspecialchars($namaPeminjam) ?></div>
-                            <input type="hidden" class="form-control" id="namaPeminjam" name="namaPeminjam" value="<?= htmlspecialchars($namaPeminjam) ?>">
-                        </div>
-                    <div class="mb-2">         
-                          <label for="jumlahBrg" class="form-label fw-bold">Jumlah Barang</label>
-                            <div class="form-control-plaintext"><?= htmlspecialchars($jumlahBrg) ?></div>
-                            <input type="hidden" class="form-control" id="jumlahBrg" name="jumlahBrg" value="<?= htmlspecialchars($jumlahBrg) ?>">
-                    </div>
-                    </div>
-                    </div>
-                             <!-- Tombol Aksi -->
-                    <div class="d-flex justify-content-between mt-4">
-                    <a href="<?= BASE_URL ?>/Menu PIC/Peminjaman Barang/peminjamanBarang.php" class="btn btn-secondary">Kembali</a>
-                    <div>
-                        <a href="penolakanBarang.php?id=<?= htmlspecialchars($idPeminjamanBrg) ?>" class="btn btn-danger">Tolak</a>
-                        <button type="submit" name="submit" class="btn btn-primary">Setuju</button>
-                    </div>
-                    </div>
-
-
- <?php if ($showModal): ?>
-        <div class="modal fade" id="successModalPersetujuan" tabindex="-1" aria-labelledby="successModalPersetujuanLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="successModalPersetujuanLabel">Berhasil</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                    </div>
-                    <div class="modal-body">
-                        Peminjaman barang <strong><?= htmlspecialchars($idPeminjamanBrg) ?></strong> telah disetujui.
-                    </div>
-                    <div class="modal-footer">
-                        <a href="<?= BASE_URL ?>/Menu PIC/Peminjaman Barang/peminjamanBarang.php" class="btn btn-primary">OK</a>
+                                <!-- Kolom Kanan -->
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <label for="idBarang" class="form-label fw-semibold">ID Barang</label>
+                                        <div class="form-control-plaintext"><?= htmlspecialchars($data['idBarang'] ?? '') ?></div>
+                                        <input type="hidden" class="form-control" id="idBarang" name="idBarang" value="<?= htmlspecialchars($data['idBarang'] ?? '') ?>">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="namaBarang" class="form-label fw-semibold">Nama Barang</label>
+                                        <div class="form-control-plaintext"><?= htmlspecialchars($data['namaBarang'] ?? '') ?></div>
+                                        <input type="hidden" class="form-control" id="namaBarang" name="namaBarang" value="<?= htmlspecialchars($data['namaBarang'] ?? '') ?>">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="namaPeminjam" class="form-label fw-semibold">Nama Peminjam</label>
+                                        <div class="form-control-plaintext"><?= htmlspecialchars($data['namaPeminjam'] ?? '') ?></div>
+                                        <input type="hidden" class="form-control" id="namaPeminjam" name="namaPeminjam" value="<?= htmlspecialchars($data['namaPeminjam'] ?? '') ?>">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="jumlahBrg" class="form-label fw-semibold">Jumlah Barang</label>
+                                        <div class="form-control-plaintext"><?= htmlspecialchars($data['jumlahBrg'] ?? '') ?></div>
+                                        <input type="hidden" class="form-control" id="jumlahBrg" name="jumlahBrg" value="<?= htmlspecialchars($data['jumlahBrg'] ?? '') ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Tombol Aksi -->
+                            <div class="d-flex justify-content-between mt-4">
+                                <a href="<?= BASE_URL ?>/Menu PIC/Peminjaman Barang/peminjamanBarang.php" class="btn btn-secondary">Kembali</a>
+                                <div>
+                                    <a href="penolakanBarang.php?id=<?= htmlspecialchars($idPeminjamanBrg) ?>" class="btn btn-danger">Tolak</a>
+                                    <button type="submit" name="submit" class="btn btn-primary">Setuju</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var modal = new bootstrap.Modal(document.getElementById('successModalPersetujuan'));
-                modal.show();
-                // Setelah modal ditampilkan, kita bisa menghapus ID dari URL agar tidak muncul lagi saat refresh
-                // (Ini opsional, tapi bagus untuk UX)
-                if (window.history.replaceState) {
-                    window.history.replaceState(null, null, window.location.pathname);
-                }
-            });
-        </script>
-    <?php endif; ?>
-
 </main>
-                  
-
-<?php
-include '../../templates/footer.php';
-?>
+<?php include '../../templates/footer.php'; ?>

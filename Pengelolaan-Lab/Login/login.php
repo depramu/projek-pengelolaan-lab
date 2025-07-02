@@ -1,4 +1,7 @@
 <?php
+
+require_once __DIR__ . '/../config.php';
+
 session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     session_destroy();
@@ -33,88 +36,81 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Ambil role dari $_GET['role'] pada saat POST juga
     $role = $_GET['role'] ?? 'Peminjam';
 
-    if (empty($identifier) || empty($kataSandi)) {
-        $error_message = 'Kolom tidak boleh kosong.';
-    } else {
-        // Gunakan SWITCH untuk menjalankan logika sesuai peran
-        switch ($role) {
-            case 'Peminjam':
-    // Coba login sebagai Mahasiswa
-    $query_mhs = "SELECT nim, kataSandi, nama FROM Mahasiswa WHERE nim = ?";
-    $stmt_mhs = sqlsrv_query($conn, $query_mhs, [$identifier]);
-    $row_mhs = sqlsrv_fetch_array($stmt_mhs, SQLSRV_FETCH_ASSOC);
+    // Hilangkan validasi: langsung proses login tanpa cek kosong
+    switch ($role) {
+        case 'Peminjam':
+            // Coba login sebagai Mahasiswa
+            $query_mhs = "SELECT nim, kataSandi, nama FROM Mahasiswa WHERE nim = ?";
+            $stmt_mhs = sqlsrv_query($conn, $query_mhs, [$identifier]);
+            $row_mhs = sqlsrv_fetch_array($stmt_mhs, SQLSRV_FETCH_ASSOC);
 
-    if ($row_mhs) {
-        if ($kataSandi === $row_mhs['kataSandi']) {
-            $_SESSION['user_id'] = $row_mhs['nim'];
-            $_SESSION['user_nama'] = $row_mhs['nama'];
-            $_SESSION['user_role'] = 'Mahasiswa';
-            $_SESSION['nim'] = $row_mhs['nim'];
-            header('Location: ../Menu Peminjam/dashboardPeminjam.php');
-            exit;
-        } else {
-            $error_message = 'kata_sandi_salah';
-            break;
-        }
-    }
-
-    // Jika gagal, coba login sebagai Karyawan (Peminjam)
-    $query_kry = "SELECT npk, kataSandi, nama, jenisRole FROM Karyawan WHERE npk = ?";
-    $stmt_kry = sqlsrv_query($conn, $query_kry, [$identifier]);
-    $row_kry = sqlsrv_fetch_array($stmt_kry, SQLSRV_FETCH_ASSOC);
-
-    if ($row_kry) {
-        if ($kataSandi === $row_kry['kataSandi']) {
-            $_SESSION['user_id'] = $row_kry['npk'];
-            $_SESSION['user_nama'] = $row_kry['nama'];
-            $_SESSION['user_role'] = 'Karyawan';
-            $_SESSION['npk'] = $row_kry['npk'];
-            header('Location: ../Menu Peminjam/dashboardPeminjam.php');
-            exit;
-        } else {
-            $error_message = 'kata_sandi_salah';
-            break;
-        }
-    }
-
-    // Jika tidak ditemukan sama sekali
-    $error_message = 'akun tidak terdafrar';
-    break;
-
-
-            case 'PIC Aset':
-            case 'KA UPT':
-                $expectedRole = ($role === 'PIC Aset') ? 'PIC Aset' : 'KA UPT';
-                $redirectPath = ($role === 'PIC Aset') ? '../Menu PIC/dashboardPIC.php' : '../Menu Ka UPT/dashboardKaUPT.php';
-
-                // Ambil user berdasarkan NPK
-                $query = "SELECT npk, kataSandi, nama, jenisRole FROM Karyawan WHERE npk = ?";
-                $stmt = sqlsrv_query($conn,  $query, [$identifier]);
-                $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
-
-                if ($row) {
-                    // Cek password dan role HARUS sesuai
-                    if ($kataSandi === $row['kataSandi'] && isset($row['jenisRole']) && $row['jenisRole'] === $expectedRole) {
-                        // Login berhasil -> STANDARISASI SESSION
-                        $_SESSION['user_id'] = $row['npk'];
-                        $_SESSION['user_nama'] = $row['nama'];
-                        $_SESSION['user_role'] = $row['jenisRole'];
-                        $_SESSION['npk'] = $row['npk'];
-                        header('Location: ' . $redirectPath);
-                        exit;
-                    } elseif ($kataSandi === $row['kataSandi']) {
-                        // Password benar tapi role salah
-                        $error_message = "Anda tidak memiliki hak akses sebagai $expectedRole.";
-                    } else {
-                        // Password salah
-                        $error_message = 'NPK atau Kata Sandi salah.';
-                    }
+            if ($row_mhs) {
+                if ($kataSandi === $row_mhs['kataSandi']) {
+                    $_SESSION['user_id'] = $row_mhs['nim'];
+                    $_SESSION['user_nama'] = $row_mhs['nama'];
+                    $_SESSION['user_role'] = 'Mahasiswa';
+                    $_SESSION['nim'] = $row_mhs['nim'];
+                    header('Location: ../Menu Peminjam/dashboardPeminjam.php');
+                    exit;
                 } else {
-                    // NPK tidak ditemukan
+                    break;
+                }
+            }
+
+            // Jika gagal, coba login sebagai Karyawan (Peminjam)
+            $query_kry = "SELECT npk, kataSandi, nama, jenisRole FROM Karyawan WHERE npk = ?";
+            $stmt_kry = sqlsrv_query($conn, $query_kry, [$identifier]);
+            $row_kry = sqlsrv_fetch_array($stmt_kry, SQLSRV_FETCH_ASSOC);
+
+            if ($row_kry) {
+                if ($kataSandi === $row_kry['kataSandi']) {
+                    $_SESSION['user_id'] = $row_kry['npk'];
+                    $_SESSION['user_nama'] = $row_kry['nama'];
+                    $_SESSION['user_role'] = 'Karyawan';
+                    $_SESSION['npk'] = $row_kry['npk'];
+                    header('Location: ../Menu Peminjam/dashboardPeminjam.php');
+                    exit;
+                } else {
+                    break;
+                }
+            }
+
+            $error_message = 'akun tidak terdafrar';
+            break;
+
+        case 'PIC Aset':
+        case 'KA UPT':
+            $expectedRole = ($role === 'PIC Aset') ? 'PIC Aset' : 'KA UPT';
+            $redirectPath = ($role === 'PIC Aset') ? '../Menu PIC/dashboardPIC.php' : '../Menu Ka UPT/dashboardKaUPT.php';
+
+            // Ambil user berdasarkan NPK
+            $query = "SELECT npk, kataSandi, nama, jenisRole FROM Karyawan WHERE npk = ?";
+            $stmt = sqlsrv_query($conn,  $query, [$identifier]);
+            $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+
+            if ($row) {
+                // Cek password dan role HARUS sesuai
+                if ($kataSandi === $row['kataSandi'] && isset($row['jenisRole']) && $row['jenisRole'] === $expectedRole) {
+                    // Login berhasil -> STANDARISASI SESSION
+                    $_SESSION['user_id'] = $row['npk'];
+                    $_SESSION['user_nama'] = $row['nama'];
+                    $_SESSION['user_role'] = $row['jenisRole'];
+                    $_SESSION['npk'] = $row['npk'];
+                    header('Location: ' . $redirectPath);
+                    exit;
+                } elseif ($kataSandi === $row['kataSandi']) {
+                    // Password benar tapi role salah
+                    $error_message = "Anda tidak memiliki hak akses sebagai $expectedRole.";
+                } else {
+                    // Password salah
                     $error_message = 'NPK atau Kata Sandi salah.';
                 }
-                break;
-        }
+            } else {
+                // NPK tidak ditemukan
+                $error_message = 'NPK atau Kata Sandi salah.';
+            }
+            $error_message = 'akun tidak terdafrar';
+            break;
     }
 }
 ?>
@@ -190,7 +186,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .login-form-container {
             width: 100%;
             max-width: 380px;
-            margin-top: 40px; /* atau padding-top: 40px; */
+            margin-top: 40px;
+            /* atau padding-top: 40px; */
         }
 
 
@@ -324,7 +321,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="login-right">
             <div class="login-form-container">
                 <h3 class="login-form-title"><?php echo htmlspecialchars($pageTitle); ?></h3>
-                <form action="login.php?role=<?php echo htmlspecialchars($role); ?>" method="POST">
+                <form action="login.php?role=<?php echo htmlspecialchars($role); ?>" method="POST" id="loginForm">
                     <?php if (!empty($error_message)): ?>
                         <div id="server-error" class="alert alert-danger" role="alert">
                             <?php echo htmlspecialchars($error_message); ?>
@@ -368,6 +365,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
-<?php
-include '../templates/footer.php';
-?>
+    <?php
+    include '../templates/footer.php';
+    ?>

@@ -27,7 +27,9 @@ function renderSidebarMenu($role, $isPeminjam, $currentPage)
             'pengembalianBarang.php', 
             'pengembalianRuangan.php',
             'pengajuanBarang.php',
-            'pengajuanRuangan.php'
+            'pengajuanRuangan.php',
+            'penolakanBarang.php',
+            'penolakanRuangan.php'
         ],
         'peminjaman' => ['cekBarang.php', 'cekRuangan.php', 'lihatBarang.php', 'lihatRuangan.php', 'tambahPeminjamanBrg.php', 'tambahPeminjamanRuangan.php'],
         'riwayat' => ['riwayatBarang.php', 'riwayatRuangan.php', 'formDetailRiwayatBrg.php', 'formDetailRiwayatRuangan.php']
@@ -68,8 +70,32 @@ function renderSidebarMenu($role, $isPeminjam, $currentPage)
                 <i class="bi bi-chevron-down transition-chevron ps-3"></i>
             </a>
                 <div class="collapse ps-4" id="pinjamSubmenu">
-                <a href="<?= BASE_URL ?>/Menu PIC/Peminjaman Barang/peminjamanBarang.php" class="nav-link <?= ($currentPage == 'peminjamanBarang.php' || $currentPage == 'cekBarang.php' || $currentPage == 'lihatBarang.php' || $currentPage == 'tambahPeminjamanBrg.php' || $currentPage == 'pengembalianBarang.php' || $currentPage == 'detailPeminjamanBarang.php' || $currentPage == 'pengajuanBarang.php') ? 'active' : '' ?>">Barang</a>
-                <a href="<?= BASE_URL ?>/Menu PIC/Peminjaman Ruangan/peminjamanRuangan.php" class="nav-link <?= ($currentPage == 'peminjamanRuangan.php' || $currentPage == 'cekRuangan.php' || $currentPage == 'lihatRuangan.php' || $currentPage == 'tambahPeminjamanRuangan.php' || $currentPage == 'pengembalianRuangan.php' || $currentPage == 'detailPeminjamanRuangan.php' || $currentPage == 'pengajuanRuangan.php') ? 'active' : '' ?>">Ruangan</a>
+                    <a href="<?= BASE_URL ?>/Menu PIC/Peminjaman Barang/peminjamanBarang.php" 
+                        class="nav-link <?= (
+                            $currentPage == 'peminjamanBarang.php' || 
+                            $currentPage == 'cekBarang.php' || 
+                            $currentPage == 'lihatBarang.php' || 
+                            $currentPage == 'tambahPeminjamanBrg.php' || 
+                            $currentPage == 'pengembalianBarang.php' || 
+                            $currentPage == 'detailPeminjamanBarang.php' || 
+                            $currentPage == 'pengajuanBarang.php' || 
+                            $currentPage == 'penolakanBarang.php'
+                        ) ? 'active' : '' ?>">
+                        Barang
+                    </a>
+                    <a href="<?= BASE_URL ?>/Menu PIC/Peminjaman Ruangan/peminjamanRuangan.php" 
+                        class="nav-link <?= (
+                            $currentPage == 'peminjamanRuangan.php' || 
+                            $currentPage == 'cekRuangan.php' || 
+                            $currentPage == 'lihatRuangan.php' || 
+                            $currentPage == 'tambahPeminjamanRuangan.php' || 
+                            $currentPage == 'pengembalianRuangan.php' || 
+                            $currentPage == 'detailPeminjamanRuangan.php' || 
+                            $currentPage == 'pengajuanRuangan.php' || 
+                            $currentPage == 'penolakanRuangan.php'
+                        ) ? 'active' : '' ?>">
+                        Ruangan
+                    </a>
             </div>
         </li>
         <li class="nav-item mb-2">

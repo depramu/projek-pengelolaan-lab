@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Halaman Admin & Operator
   setupLaporanPage();
-  setupPengajuanPage();
+  setupPenolakanBarang();
   setupPengembalianBarangPage();
   setupPengembalianRuanganPage();
   setupDetailRiwayatForm();
@@ -198,50 +198,66 @@ function setupSuccessModalFromPHP() {
 // =================================================================
 
 function setupLoginForm() {
-  const loginForm = document.getElementById("loginForm"); // Gunakan ID spesifik
+  const loginForm = document.getElementById("loginForm");
   if (!loginForm) return;
+
+  // Pastikan error span selalu terlihat (jika ada error)
+  const idError = document.getElementById("identifier-error");
+  const passError = document.getElementById("password-error");
 
   loginForm.addEventListener("submit", function (e) {
     const idInput = document.getElementById("identifier");
     const passInput = document.getElementById("kataSandi");
-    const idError = document.getElementById("identifier-error");
-    const passError = document.getElementById("password-error");
     let isValid = true;
 
-    idError.textContent = "";
-    passError.textContent = "";
+    // Reset pesan error
+    if (idError) idError.textContent = "";
+    if (passError) passError.textContent = "";
 
+    // Validasi identifier
     if (!idInput.value.trim()) {
-      idError.textContent = "*NIM/NPK tidak boleh kosong.";
+      if (idError) idError.textContent = "*NIM/NPK tidak boleh kosong.";
       isValid = false;
     } else if (!/^\d+$/.test(idInput.value.trim())) {
-      idError.textContent = "*NIM/NPK harus berupa angka.";
+      if (idError) idError.textContent = "*NIM/NPK harus berupa angka.";
       isValid = false;
     }
 
+    // Validasi password
     if (!passInput.value.trim()) {
-      passError.textContent = "*Kata Sandi tidak boleh kosong.";
+      if (passError) passError.textContent = "*Kata Sandi tidak boleh kosong.";
       isValid = false;
     }
 
-    if (!isValid) e.preventDefault();
+    // Jika tidak valid, cegah submit dan pastikan error terlihat
+    if (!isValid) {
+      e.preventDefault();
+      if (idError) idError.style.display = "inline";
+      if (passError) passError.style.display = "inline";
+    }
   });
 
+  // Tampilkan error dari server jika ada
   const serverError = document.getElementById("server-error");
   if (serverError && serverError.textContent.trim() !== "") {
     const errorMessage = serverError.textContent.trim().toLowerCase();
     serverError.classList.add("d-none");
 
-    const idError = document.getElementById("identifier-error");
-    const passError = document.getElementById("password-error");
+    if (idError) idError.textContent = "";
+    if (passError) passError.textContent = "";
 
-    if (errorMessage.includes("akun_tidak_terdaftar")) {
-      idError.textContent = "*Akun tidak terdaftar*";
+    if (
+      errorMessage.includes("akun tidak terdafrar") ||
+      errorMessage.includes("akun_tidak_terdaftar")
+    ) {
+      if (idError) idError.textContent = "*Akun tidak terdaftar*";
     } else if (errorMessage.includes("kata_sandi_salah")) {
-      passError.textContent = "*Kata sandi salah*";
+      if (passError) passError.textContent = "*Kata sandi salah*";
     } else {
-      idError.textContent = serverError.textContent.trim();
+      if (idError) idError.textContent = serverError.textContent.trim();
     }
+    if (idError) idError.style.display = "inline";
+    if (passError) passError.style.display = "inline";
   }
 }
 
@@ -841,12 +857,41 @@ function setupDetailRiwayatForm() {
   });
 }
 
-function setupPengajuanPage() {
-  const btnTolakShowField = document.getElementById("btnTolakShowField");
-  if (!btnTolakShowField) return;
+function setupPenolakanBarang() {
+  // Cek kedua kemungkinan id form
+  const form =
+    document.getElementById("formPenolakanBarang") ||
+    document.getElementById("formPenolakanRuangan");
+  if (!form) return;
 
-  // Logika untuk menampilkan field alasan penolakan
-  // (Asumsi sudah ada di HTML dan bekerja, fungsi ini hanya sebagai placeholder inisialisasi)
+  form.addEventListener("submit", function (e) {
+    let isValid = true;
+    const alasanInput = document.getElementById("alasanPenolakan");
+    const alasanError = document.getElementById("alasanPenolakanError");
+
+    // Selalu tampilkan error span, kosongkan dulu
+    if (alasanError) {
+      alasanError.textContent = "";
+      alasanError.style.display = "inline";
+    }
+
+    if (!alasanInput || !alasanInput.value.trim()) {
+      if (alasanError) {
+        alasanError.textContent = "*Harus diisi";
+        alasanError.style.display = "inline";
+      }
+      isValid = false;
+    } else {
+      if (alasanError) {
+        alasanError.textContent = "";
+        alasanError.style.display = "none";
+      }
+    }
+
+    if (!isValid) {
+      e.preventDefault();
+    }
+  });
 }
 
 function setupPengembalianBarangPage() {
@@ -1051,7 +1096,38 @@ function setupFormEditBarang() {
     e.preventDefault();
     let isValid = true;
 
-    // ... validasi nama, stok, lokasi (logika tetap sama, stok boleh 0) ...
+    // Validasi nama barang
+    const namaBarang = document.getElementById("namaBarang");
+    const namaError = document.getElementById("namaError");
+    if (!namaBarang.value.trim()) {
+      namaError.textContent = "*Harus diisi";
+      namaError.style.display = "inline";
+      isValid = false;
+    } else {
+      namaError.style.display = "none";
+    }
+
+    // Validasi stok barang (boleh 0 untuk edit)
+    const stokBarang = document.getElementById("stokBarang");
+    const stokError = document.getElementById("stokError");
+    if (stokBarang.value === "" || stokBarang.value < 0) {
+      stokError.textContent = "*Harus diisi dan minimal 0";
+      stokError.style.display = "inline";
+      isValid = false;
+    } else {
+      stokError.style.display = "none";
+    }
+
+    // Validasi lokasi barang
+    const lokasiBarang = document.getElementById("lokasiBarang");
+    const lokasiError = document.getElementById("lokasiError");
+    if (!lokasiBarang.value) {
+      lokasiError.textContent = "*Harus dipilih";
+      lokasiError.style.display = "inline";
+      isValid = false;
+    } else {
+      lokasiError.style.display = "none";
+    }
 
     if (isValid) {
       const confirmModal = new bootstrap.Modal(
@@ -1137,13 +1213,16 @@ function setupFormEditRuangan() {
     const kondisiError = document.getElementById("kondisiError");
     const ketersediaanError = document.getElementById("ketersediaanError");
 
+    // Reset error messages
+    namaError.style.display = "none";
+    kondisiError.style.display = "none";
+    ketersediaanError.style.display = "none";
+
     // Validasi nama ruangan
     if (!namaRuangan.value.trim()) {
       namaError.textContent = "*Harus diisi";
       namaError.style.display = "inline";
       isValid = false;
-    } else {
-      namaError.style.display = "none";
     }
 
     // Validasi kondisi ruangan
@@ -1151,8 +1230,6 @@ function setupFormEditRuangan() {
       kondisiError.textContent = "*Harus dipilih";
       kondisiError.style.display = "inline";
       isValid = false;
-    } else {
-      kondisiError.style.display = "none";
     }
 
     // Validasi ketersediaan
@@ -1160,8 +1237,6 @@ function setupFormEditRuangan() {
       ketersediaanError.textContent = "*Harus dipilih";
       ketersediaanError.style.display = "inline";
       isValid = false;
-    } else {
-      ketersediaanError.style.display = "none";
     }
 
     if (isValid) {
@@ -1181,6 +1256,7 @@ function setupFormTambahAkunMhs() {
   if (!form) return;
 
   form.addEventListener("submit", function (e) {
+    e.preventDefault();
     let isValid = true;
     let nim = document.getElementById("nim").value.trim();
     let nama = document.getElementById("nama").value.trim();
@@ -1197,76 +1273,83 @@ function setupFormTambahAkunMhs() {
     let confPassError = document.getElementById("confPassError");
     let passPattern = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
-    let valid = true;
-
     // Reset error messages
     nimError.style.display = "none";
     namaError.style.display = "none";
     emailError.style.display = "none";
     roleError.style.display = "none";
     passError.style.display = "none";
+    confPassError.style.display = "none";
 
     if (nim === "") {
       nimError.textContent = "*Harus diisi";
       nimError.style.display = "inline";
-      valid = false;
+      isValid = false;
     } else if (!/^\d+$/.test(nim)) {
       nimError.textContent = "*Harus berupa angka";
       nimError.style.display = "inline";
-      valid = false;
+      isValid = false;
     }
 
     if (nama === "") {
       namaError.textContent = "*Harus diisi";
       namaError.style.display = "inline";
-      valid = false;
+      isValid = false;
     } else if (/\d/.test(nama)) {
       namaError.textContent = "*Harus berupa huruf";
       namaError.style.display = "inline";
-      valid = false;
+      isValid = false;
     }
 
     if (email === "") {
       emailError.textContent = "*Harus diisi";
       emailError.style.display = "inline";
-      valid = false;
+      isValid = false;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       emailError.textContent = "*Format email tidak valid";
       emailError.style.display = "inline";
-      valid = false;
+      isValid = false;
     }
 
     if (jenisRole === "") {
       roleError.textContent = "*Harus diisi";
       roleError.style.display = "inline";
-      valid = false;
+      isValid = false;
     }
 
     if (pass === "") {
       passError.textContent = "*Harus diisi";
       passError.style.display = "inline";
-      valid = false;
+      isValid = false;
     } else if (pass.length > 0 && pass.length < 8) {
       passError.textContent = "*Minimal 8 karakter";
       passError.style.display = "inline";
-      valid = false;
+      isValid = false;
     } else if (!passPattern.test(pass)) {
       passError.textContent = "*Harus mengandung huruf dan angka";
       passError.style.display = "inline";
-      valid = false;
+      isValid = false;
     }
 
     if (conf === "") {
       confPassError.textContent = "*Harus diisi";
       confPassError.style.display = "inline";
-      valid = false;
+      isValid = false;
     } else if (pass !== "" && conf !== "" && pass !== conf) {
       confPassError.textContent = "*Tidak sesuai";
       confPassError.style.display = "inline";
-      valid = false;
+      isValid = false;
     }
 
-    if (!valid) e.preventDefault();
+    if (isValid) {
+      const confirmModal = new bootstrap.Modal(
+        document.getElementById("confirmModal")
+      );
+      document.getElementById("confirmAction").textContent =
+        "menambah akun mahasiswa";
+      document.getElementById("confirmYes").onclick = () => form.submit();
+      confirmModal.show();
+    }
   });
 }
 
@@ -1274,60 +1357,77 @@ function setupFormEditAkunMhs() {
   const form = document.getElementById("formEditAkunMhs");
   if (!form) return;
 
-  document.querySelector("form").addEventListener("submit", function (e) {
-    let email = document.getElementById("email").value.trim();
-    let emailError = document.getElementById("emailError");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    let isValid = true;
 
-    let valid = true;
-
-    if (email === "") {
+    // Validasi email
+    const email = document.getElementById("email").value.trim();
+    const emailError = document.getElementById("emailError");
+    if (!email) {
       emailError.textContent = "*Harus diisi";
       emailError.style.display = "inline";
-      valid = false;
+      isValid = false;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       emailError.textContent = "*Format email tidak valid";
       emailError.style.display = "inline";
-      valid = false;
+      isValid = false;
+    } else {
+      emailError.style.display = "none";
     }
-    if (!valid) e.preventDefault();
+
+    if (isValid) {
+      const confirmModal = new bootstrap.Modal(
+        document.getElementById("confirmModal")
+      );
+      document.getElementById("confirmAction").textContent =
+        "mengubah data akun mahasiswa";
+      document.getElementById("confirmYes").onclick = () => form.submit();
+      confirmModal.show();
+    }
   });
 
+  // Setup input protection untuk field yang tidak boleh diubah
   document.querySelectorAll(".protect-input").forEach((input) => {
     input.addEventListener("paste", (e) => e.preventDefault());
-    input.addEventListener("input", (e) => (input.value = input.defaultValue));
+    input.addEventListener("input", () => (input.value = input.defaultValue));
     input.addEventListener("mousedown", (e) => e.preventDefault());
   });
 
+  // Setup password visibility toggle
   const passInput = document.getElementById("kataSandi");
-  passInput.addEventListener("mouseenter", function () {
-    passInput.type = "text";
-  });
-  passInput.addEventListener("mouseleave", function () {
-    passInput.type = "password";
-  });
+  if (passInput) {
+    passInput.addEventListener("mouseenter", function () {
+      passInput.type = "text";
+    });
+    passInput.addEventListener("mouseleave", function () {
+      passInput.type = "password";
+    });
+  }
 }
 
 function setupFormTambahAkunKry() {
   const form = document.getElementById("formTambahAkunKry");
   if (!form) return;
 
-  document.querySelector("form").addEventListener("submit", function (e) {
-    let npk = document.getElementById("npk").value.trim();
-    let nama = document.getElementById("nama").value.trim();
-    let email = document.getElementById("email").value.trim();
-    let jenisRole = document.getElementById("jenisRole").value;
-    let pass = document.getElementById("kataSandi").value;
-    let conf = document.getElementById("konfirmasiSandi").value;
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    let isValid = true;
 
-    let npkError = document.getElementById("npkError");
-    let namaError = document.getElementById("namaError");
-    let emailError = document.getElementById("emailError");
-    let roleError = document.getElementById("roleError");
-    let passError = document.getElementById("passError");
-    let confPassError = document.getElementById("confPassError");
-    let passPattern = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+    const npk = document.getElementById("npk").value.trim();
+    const nama = document.getElementById("nama").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const jenisRole = document.getElementById("jenisRole").value;
+    const pass = document.getElementById("kataSandi").value;
+    const conf = document.getElementById("konfirmasiSandi").value;
 
-    let valid = true;
+    const npkError = document.getElementById("npkError");
+    const namaError = document.getElementById("namaError");
+    const emailError = document.getElementById("emailError");
+    const roleError = document.getElementById("roleError");
+    const passError = document.getElementById("passError");
+    const confPassError = document.getElementById("confPassError");
+    const passPattern = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
     // Reset error messages
     npkError.style.display = "none";
@@ -1335,68 +1435,83 @@ function setupFormTambahAkunKry() {
     emailError.style.display = "none";
     roleError.style.display = "none";
     passError.style.display = "none";
+    confPassError.style.display = "none";
 
-    if (npk === "") {
+    // Validasi NPK
+    if (!npk) {
       npkError.textContent = "*Harus diisi";
       npkError.style.display = "inline";
-      valid = false;
+      isValid = false;
     } else if (!/^\d+$/.test(npk)) {
       npkError.textContent = "*Harus berupa angka";
       npkError.style.display = "inline";
-      valid = false;
+      isValid = false;
     }
 
-    if (nama === "") {
+    // Validasi nama
+    if (!nama) {
       namaError.textContent = "*Harus diisi";
       namaError.style.display = "inline";
-      valid = false;
+      isValid = false;
     } else if (/\d/.test(nama)) {
       namaError.textContent = "*Harus berupa huruf";
       namaError.style.display = "inline";
-      valid = false;
+      isValid = false;
     }
 
-    if (email === "") {
+    // Validasi email
+    if (!email) {
       emailError.textContent = "*Harus diisi";
       emailError.style.display = "inline";
-      valid = false;
+      isValid = false;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       emailError.textContent = "*Format email tidak valid";
       emailError.style.display = "inline";
-      valid = false;
+      isValid = false;
     }
 
-    if (jenisRole === "") {
+    // Validasi role
+    if (!jenisRole) {
       roleError.textContent = "*Harus diisi";
       roleError.style.display = "inline";
-      valid = false;
+      isValid = false;
     }
 
-    if (pass === "") {
+    // Validasi password
+    if (!pass) {
       passError.textContent = "*Harus diisi";
       passError.style.display = "inline";
-      valid = false;
-    } else if (pass.length > 0 && pass.length < 8) {
+      isValid = false;
+    } else if (pass.length < 8) {
       passError.textContent = "*Minimal 8 karakter";
       passError.style.display = "inline";
-      valid = false;
+      isValid = false;
     } else if (!passPattern.test(pass)) {
       passError.textContent = "*Harus mengandung huruf dan angka";
       passError.style.display = "inline";
-      valid = false;
+      isValid = false;
     }
 
-    if (conf === "") {
+    // Validasi konfirmasi password
+    if (!conf) {
       confPassError.textContent = "*Harus diisi";
       confPassError.style.display = "inline";
-      valid = false;
-    } else if (pass !== "" && conf !== "" && pass !== conf) {
+      isValid = false;
+    } else if (pass && conf && pass !== conf) {
       confPassError.textContent = "*Tidak sesuai";
       confPassError.style.display = "inline";
-      valid = false;
+      isValid = false;
     }
 
-    if (!valid) e.preventDefault();
+    if (isValid) {
+      const confirmModal = new bootstrap.Modal(
+        document.getElementById("confirmModal")
+      );
+      document.getElementById("confirmAction").textContent =
+        "menambah akun karyawan";
+      document.getElementById("confirmYes").onclick = () => form.submit();
+      confirmModal.show();
+    }
   });
 }
 
@@ -1404,22 +1519,34 @@ function setupFormEditAkunKry() {
   const form = document.getElementById("formEditAkunKry");
   if (!form) return;
 
-  document.querySelector("form").addEventListener("submit", function (e) {
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    let isValid = true;
     let email = document.getElementById("email").value.trim();
     let emailError = document.getElementById("emailError");
 
-    let valid = true;
+    // Reset error messages
+    emailError.style.display = "none";
 
     if (email === "") {
       emailError.textContent = "*Harus diisi";
       emailError.style.display = "inline";
-      valid = false;
+      isValid = false;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       emailError.textContent = "*Format email tidak valid";
       emailError.style.display = "inline";
-      valid = false;
+      isValid = false;
     }
-    if (!valid) e.preventDefault();
+
+    if (isValid) {
+      const confirmModal = new bootstrap.Modal(
+        document.getElementById("confirmModal")
+      );
+      document.getElementById("confirmAction").textContent =
+        "mengubah data akun karyawan";
+      document.getElementById("confirmYes").onclick = () => form.submit();
+      confirmModal.show();
+    }
   });
 
   document.querySelectorAll(".protect-input").forEach((input) => {
@@ -1444,49 +1571,70 @@ function setupFormTambahPeminjamanBrg() {
   setupStockStepper("stepperContainerPeminjaman", "jumlahBrg", "stokTersedia");
 
   form.addEventListener("submit", function (e) {
-    let valid = true;
+    e.preventDefault();
+    let isValid = true;
 
-    const jumlahInput = document.getElementById("jumlahBrg");
+    const jumlahInputEl = document.getElementById("jumlahBrg");
+    const alasanInputEl = document.getElementById("alasanPeminjamanBrg");
     const jumlahError = document.getElementById("jumlahError");
-    // Ambil stok tersedia dari elemen (misal hidden input atau data attribute)
-    let stokTersedia = 0;
-    // Coba ambil dari elemen dengan id 'stokTersedia', jika ada
-    const stokElem = document.getElementById("stokTersedia");
-    if (stokElem) {
-      stokTersedia = parseInt(stokElem.value || stokElem.textContent || "0");
-    } else if (window.stokTersedia !== undefined) {
-      stokTersedia = parseInt(window.stokTersedia);
-    } else {
-      // fallback: coba ambil dari data attribute pada input jumlahBrg
-      stokTersedia = parseInt(jumlahInput.getAttribute("data-stok") || "0");
-    }
-    let jumlahValue = parseInt(jumlahInput.value) || 0;
+    const alasanError = document.getElementById("alasanError");
 
-    if (jumlahValue <= 0) {
-      jumlahError.textContent = "*Jumlah harus lebih dari 0.";
+    // Reset error messages
+    jumlahError.style.display = "none";
+    alasanError.style.display = "none";
+
+    // Validasi jumlah barang
+    let jumlahValue = parseInt(jumlahInputEl.value, 10) || 0;
+    if (!jumlahInputEl.value.trim()) {
+      jumlahError.textContent = "*Harus diisi";
       jumlahError.style.display = "inline";
-      valid = false;
-    } else if (jumlahValue > stokTersedia) {
-      jumlahError.textContent = "*Jumlah melebihi stok tersedia.";
-      jumlahError.style.display = "inline";
-      valid = false;
-    } else {
-      jumlahError.style.display = "none";
+      isValid = false;
     }
 
     // Validasi alasan peminjaman
-    const alasanInput = document.getElementById("alasanPeminjamanBrg");
-    const alasanError = document.getElementById("alasanError");
-    if (alasanInput.value.trim() === "") {
+    if (!alasanInputEl.value.trim()) {
       alasanError.textContent = "*Harus diisi";
       alasanError.style.display = "inline";
-      valid = false;
-    } else {
-      alasanError.style.display = "none";
+      isValid = false;
     }
 
-    if (!valid) {
-      e.preventDefault();
+    // Ambil stok tersedia dari elemen (misal hidden input atau data attribute)
+    let stokTersedia = 0;
+    const stokElem = document.getElementById("stokBarang");
+    if (stokElem) {
+      stokTersedia = parseInt(
+        stokElem.value || stokElem.textContent || "0",
+        10
+      );
+    } else if (window.stokTersedia !== undefined) {
+      stokTersedia = parseInt(window.stokTersedia, 10);
+    } else {
+      stokTersedia = parseInt(
+        jumlahInputEl.getAttribute("data-stok") || "0",
+        10
+      );
+    }
+    if (isNaN(stokTersedia)) stokTersedia = 0;
+
+    // Validasi jumlah terhadap stok
+    if (jumlahValue <= 0) {
+      jumlahError.textContent = "*Jumlah harus lebih dari 0.";
+      jumlahError.style.display = "inline";
+      isValid = false;
+    } else if (jumlahValue > stokTersedia) {
+      jumlahError.textContent = "*Jumlah melebihi stok tersedia.";
+      jumlahError.style.display = "inline";
+      isValid = false;
+    }
+
+    if (isValid) {
+      const confirmModal = new bootstrap.Modal(
+        document.getElementById("confirmModal")
+      );
+      document.getElementById("confirmAction").textContent =
+        "menambah peminjaman barang";
+      document.getElementById("confirmYes").onclick = () => form.submit();
+      confirmModal.show();
     }
   });
 }

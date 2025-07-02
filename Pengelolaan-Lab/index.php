@@ -37,6 +37,7 @@
                 opacity: 0;
                 transform: translateY(50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -59,6 +60,7 @@
                 opacity: 0;
                 transform: translateX(-50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -76,13 +78,16 @@
                 opacity: 0;
                 transform: scale(0.3);
             }
+
             50% {
                 opacity: 1;
                 transform: scale(1.05);
             }
+
             70% {
                 transform: scale(0.9);
             }
+
             100% {
                 opacity: 1;
                 transform: scale(1);
@@ -103,6 +108,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -117,9 +123,12 @@
         }
 
         @keyframes float {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0px);
             }
+
             50% {
                 transform: translateY(-10px);
             }
@@ -132,9 +141,12 @@
         }
 
         @keyframes pulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: scale(1);
             }
+
             50% {
                 transform: scale(1.05);
             }
@@ -156,6 +168,7 @@
                 opacity: 0;
                 transform: translateX(50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -174,6 +187,7 @@
                 opacity: 0;
                 transform: translateY(-30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -208,6 +222,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -279,17 +294,20 @@
                     </span>
                     <span class="w-100 text-center me-4">PIC Aset</span>
                 </a>
-                <a href="Login/login.php?role=Ka UPT" class="btn btn-light role-btn fw-bold d-flex align-items-center justify-content-center text-center" style="color: #065ba6;">
+                <a href="Login/login.php?role=KA UPT" class="btn btn-light role-btn fw-bold d-flex align-items-center justify-content-center text-center" style="color: #065ba6;">
                     <span class="d-flex align-items-center justify-content-center" style="width: 24px;">
                         <i class="bi bi-person-badge-fill"></i>
                     </span>
-                    <span class="w-100 text-center me-4">Ka UPT</span>
+                    <span class="w-100 text-center me-4">KA UPT</span>
                 </a>
-                <!-- Bootstrap Icons CDN -->
+
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
             </div>
         </div>
     </div>
-</body>
 
-</html>
+
+    <?php
+
+    include 'templates/footer.php';
+    ?>

@@ -2,7 +2,6 @@
 include '../../templates/header.php';
 
 // Pagination setup
-$currentPage = basename($_SERVER['PHP_SELF']); // Determine the current page
 $perPage = 7;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 if ($page < 1) $page = 1;

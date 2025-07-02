@@ -81,7 +81,7 @@ include '../../templates/sidebar.php';
                         <span class="fw-bold">Edit Ruangan</span>
                     </div>
                     <div class="card-body">
-                        <form method="POST">
+                        <form id="formEditRuangan" method="POST">
                             <div class="mb-2 row">
                                 <div class="col-md-6">
                                     <label for="idRuangan" class="form-label fw-semibold d-flex align-items-center">ID Ruangan</label>
@@ -94,7 +94,7 @@ include '../../templates/sidebar.php';
                                             <span class="fw-normal text-danger ms-2" style="font-size:0.95em;"><?= $namaError ?></span>
                                         <?php endif; ?>
                                     </label>
-                                    <input type="text" class="form-control" id="namaRuangan" name="namaRuangan" value="<?= isset($namaRuangan) ? htmlspecialchars($namaRuangan) : htmlspecialchars($data['namaRuangan']) ?>" placeholder="Masukkan nama ruangan..">
+                                    <input type="text" class="form-control protect-input d-block bg-light" id="namaRuangan" name="namaRuangan" value="<?= isset($namaRuangan) ? htmlspecialchars($namaRuangan) : htmlspecialchars($data['namaRuangan']) ?>" placeholder="Masukkan nama ruangan..">
                                 </div>
                             </div>
                             <div class="mb-2 row">

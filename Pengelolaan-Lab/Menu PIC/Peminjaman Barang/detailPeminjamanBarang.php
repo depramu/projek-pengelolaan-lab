@@ -51,7 +51,7 @@
                 <div class="col-md-8 col-lg-12" style="margin-right: 20px;">
                     <div class="card border border-dark">
                         <div class="card-header bg-white border-bottom border-dark">
-                            <span class="fw-semibold">Detail Peminjaman Barang</span>
+                            <span class="fw-bold">Detail Peminjaman Barang</span>
                         </div>
                         <div class="card-body scrollable-card-content" style="max-height: 75vh; overflow-y: auto;">
                             <?php if ($error_message) : ?>
@@ -62,17 +62,16 @@
                                 <form id="formDetail" method="POST">
                                     <div class="row mb-3">
                                         <div class="col-md-6 mb-3 mb-md-0">
-                                            <label class="form-label fw-bold">ID Peminjaman Barang</label>
+                                            <label class="form-label fw-semibold">ID Peminjaman</label>
                                             <div class="form-control-plaintext">
                                                 <?= htmlspecialchars($data['idPeminjamanBrg']) ?>
                                             </div>
                                             <input type="hidden" name="idPeminjamanBrg" class="form-control" value="<?= htmlspecialchars($data['idPeminjamanBrg']) ?>">
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label fw-bold">NIM/NPK</label>
+                                            <label class="form-label fw-semibold">NIM/NPK</label>
                                             <div class="form-control-plaintext">
                                                 <?php
-                                                // Tampilkan NIM jika ada, jika tidak tampilkan NPK, jika keduanya kosong tampilkan '-'
                                                 if (!empty($data['nim'])) {
                                                     echo htmlspecialchars($data['nim']);
                                                 } elseif (!empty($data['npk'])) {
@@ -83,26 +82,26 @@
                                                 ?>
                                             </div>
                                             <input type="hidden" class="form-control" value="<?php
-                                                if (!empty($data['nim'])) {
-                                                    echo htmlspecialchars($data['nim']);
-                                                } elseif (!empty($data['npk'])) {
-                                                    echo htmlspecialchars($data['npk']);
-                                                } else {
-                                                    echo '-';
-                                                }
-                                            ?>">
+                                                                                                if (!empty($data['nim'])) {
+                                                                                                    echo htmlspecialchars($data['nim']);
+                                                                                                } elseif (!empty($data['npk'])) {
+                                                                                                    echo htmlspecialchars($data['npk']);
+                                                                                                } else {
+                                                                                                    echo '-';
+                                                                                                }
+                                                                                                ?>">
                                         </div>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6 mb-3 mb-md-0">
-                                            <label class="form-label fw-bold">ID Barang</label>
+                                            <label class="form-label fw-semibold">ID Barang</label>
                                             <div class="form-control-plaintext">
                                                 <?= htmlspecialchars($data['idBarang']) ?>
                                             </div>
                                             <input type="hidden" class="form-control" value="<?= htmlspecialchars($data['idBarang']) ?>">
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label fw-bold">Jumlah Barang</label>
+                                            <label class="form-label fw-semibold">Jumlah Barang</label>
                                             <div class="form-control-plaintext">
                                                 <?= htmlspecialchars($data['jumlahBrg']) ?>
                                             </div>
@@ -111,18 +110,18 @@
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6 mb-3 mb-md-0">
-                                            <label class="form-label fw-bold">Tanggal Peminjaman</label>
+                                            <label class="form-label fw-semibold">Tanggal Peminjaman</label>
                                             <div class="form-control-plaintext">
                                                 <?= htmlspecialchars(
                                                     $data['tglPeminjamanBrg'] instanceof DateTime
-                                                        ? $data['tglPeminjamanBrg']->format('d F Y')
+                                                        ? $data['tglPeminjamanBrg']->format('d-m-y')
                                                         : ''
                                                 ) ?>
                                             </div>
                                             <input type="hidden" class="form-control" value="<?= ($data['tglPeminjamanBrg'] instanceof DateTime) ? $data['tglPeminjamanBrg']->format('d F Y') : '' ?>">
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label fw-bold">Status Peminjaman</label>
+                                            <label class="form-label fw-semibold">Status Peminjaman</label>
                                             <?php
                                             // Tentukan class status
                                             $statusClass = 'text-secondary';
@@ -153,7 +152,7 @@
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-12">
-                                            <label class="form-label fw-bold">Alasan Peminjaman</label>
+                                            <label class="form-label fw-semibold">Alasan Peminjaman</label>
                                             <div class="form-control-plaintext">
                                                 <?= htmlspecialchars($data['alasanPeminjamanBrg']) ?>
                                             </div>

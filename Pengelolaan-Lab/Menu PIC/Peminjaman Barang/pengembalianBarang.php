@@ -12,7 +12,7 @@ if (empty($idPeminjamanBrg)) {
 }
 
 // Ambil data awal peminjaman
-$data = [];
+$data = null;
 $jumlahBrg = 0;
 $idBarang = null;
 $sisaPinjaman = 0;
@@ -27,18 +27,19 @@ $params_get = [$idPeminjamanBrg];
 $stmt_get = sqlsrv_query($conn, $query_get, $params_get);
 
 if ($stmt_get && ($data = sqlsrv_fetch_array($stmt_get, SQLSRV_FETCH_ASSOC))) {
-    $idBarang = $data['idBarang'];
-    $jumlahBrg = $data['jumlahBrg'];
-    $sisaPinjaman = $data['sisaPinjaman'];
-    $namaBarang = $data['namaBarang'];
+    // $data sudah berisi array hasil query, tidak perlu diekstrak ke variabel terpisah
+    // Gunakan $data['idBarang'], $data['jumlahBrg'], $data['sisaPinjaman'], $data['namaBarang'] langsung di bawah
 } else {
-    $idBarang = '';
-    $jumlahBrg = 0;
-    $sisaPinjaman = 0;
-    $namaBarang = '';
+    $data = null;
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Jika $data null, set variabel ke default agar tidak error
+    $jumlahBrg = $data['jumlahBrg'] ?? 0;
+    $idBarang = $data['idBarang'] ?? '';
+    $sisaPinjaman = $data['sisaPinjaman'] ?? 0;
+    $namaBarang = $data['namaBarang'] ?? '';
+
     $jumlahPengembalian = (int)$_POST['jumlahPengembalian'];
     $catatan = $_POST['catatanPengembalianBarang'];
     $kondisiBrg = $_POST['kondisiBrg'];
@@ -83,6 +84,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error = "Gagal memproses pengembalian barang. Silakan coba lagi.";
         }
     }
+} else {
+    // Jika GET, set variabel dari $data jika ada
+    $jumlahBrg = $data['jumlahBrg'] ?? 0;
+    $idBarang = $data['idBarang'] ?? '';
+    $sisaPinjaman = $data['sisaPinjaman'] ?? 0;
+    $namaBarang = $data['namaBarang'] ?? '';
 }
 
 // Tampilkan modal jika redirect sukses
@@ -145,7 +152,7 @@ include '../../templates/sidebar.php';
                                 </div>
                                 <div class="col-md-4">
                                     <label for="jumlahPengembalian" class="form-label w-100 text-center fw-semibold">Jumlah Pengembalian
-                                        <span id="jumlahError" class="text-danger small mt-1 fw-normal" style="font: size 0.95em;display:none;">*Harus Diisi</span>
+                                        <span id="jumlahError" class="text-danger small mt-1 fw-normal" style="font: size 0.95em;display:none;"></span>
                                     </label>
                                     <div class="input-group mx-auto" style="max-width: 140px;">
                                         <button class="btn btn-outline-secondary" type="button" onclick="changeStok(-1)">-</button>
@@ -155,7 +162,7 @@ include '../../templates/sidebar.php';
                                 </div>
                                 <div class="col-md-4">
                                     <label for="txtKondisi" class="form-label fw-semibold">Kondisi Barang
-                                        <span id="kondisiError" class="text-danger small mt-1 fw-normal" style="font: size 0.95em;display:none;">*Harus Dipilih</span>
+                                        <span id="kondisiError" class="text-danger small mt-1 fw-normal" style="font: size 0.95em;display:none;"></span>
                                     </label>
                                     <select class="form-select" id="txtKondisi" name="kondisiBrg">
                                         <option selected>Pilih Kondisi Barang</option>
@@ -166,7 +173,7 @@ include '../../templates/sidebar.php';
                             </div>
                             <div class="mb-2">
                                 <label for="catatanPengembalianBarang" class="form-label fw-semibold">Catatan Pengembalian
-                                    <span id="catatanError" class="text-danger small mt-1 fw-normal" style="font: size 0.95em;display:none;">*Harus Diisi</span>
+                                    <span id="catatanError" class="text-danger small mt-1 fw-normal" style="font: size 0.95em;display:none;"></span>
                                 </label>
                                 <textarea type="text" class="form-control" id="catatanPengembalianBarang" name="catatanPengembalianBarang" rows="3" style="resize: none;" placeholder="Masukkan catatan pengembalian.."></textarea>
                             </div>
