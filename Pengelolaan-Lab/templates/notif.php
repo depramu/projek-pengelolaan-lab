@@ -1,7 +1,9 @@
 <?php
-session_start();
-include 'header.php';
-include 'sidebar.php';
+require_once __DIR__ . '/../function/init.php';
+
+include __DIR__ . '/header.php';
+include __DIR__ . '/sidebar.php';
+
 
 $notifikasi = isset($_SESSION['notifikasi']) ? $_SESSION['notifikasi'] : [];
 
@@ -28,7 +30,7 @@ $notifikasi = array_filter(
     <div class="mb-5">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu PIC/dashboardPIC.php">Sistem Pengelolaan Lab</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu/Menu PIC/dashboardPIC.php">Sistem Pengelolaan Lab</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Notifikasi</li>
             </ol>
         </nav>
@@ -67,8 +69,6 @@ $notifikasi = array_filter(
             </table>
 
 </main>
-</div>
-</div>
 
 <?php
 include 'footer.php';

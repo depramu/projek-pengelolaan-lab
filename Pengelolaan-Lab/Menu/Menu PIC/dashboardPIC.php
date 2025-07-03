@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../function/init.php'; // Penyesuaian: gunakan init.php untuk inisialisasi dan otorisasi
 authorize_role('PIC Aset'); // Lindungi halaman ini untuk role 'PIC Aset'
+
 include '../../templates/header.php';
 include '../../templates/sidebar.php';
 
@@ -11,7 +12,7 @@ include '../../templates/sidebar.php';
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#">Sistem Pengelolaan Lab</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+        <li class="breadcrumb-item active" aria-current="page">Beranda</li>
       </ol>
     </nav>
   </div>

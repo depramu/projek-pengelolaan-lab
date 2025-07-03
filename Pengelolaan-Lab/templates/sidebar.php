@@ -107,12 +107,12 @@ function renderSidebarMenu($role, $isPeminjam, $currentPage)
         $isPinjamActive = in_array($currentPage, $submenuFiles['pinjam']);
     ?>
         <li class="nav-item mb-2">
-            <a href="<?= BASE_URL ?>/Menu Ka UPT/dashboardKaUPT.php" class="nav-link <?= ($currentPage == 'dashboardKaUPT.php') ? 'active' : ''; ?>">
+            <a href="<?= BASE_URL ?>/Menu/Menu Ka UPT/dashboardKaUPT.php" class="nav-link <?= ($currentPage == 'dashboardKaUPT.php') ? 'active' : ''; ?>">
                 <img src="<?= BASE_URL ?>/icon/dashboard0.svg" class="sidebar-icon">Beranda
             </a>
         </li>
         <li class="nav-item mb-2">
-            <a href="<?= BASE_URL ?>/Menu Ka UPT/laporan.php" class="nav-link <?= ($currentPage == 'laporan.php') ? 'active' : '' ?>">
+            <a href="<?= BASE_URL ?>/Menu/Menu Ka UPT/laporan.php" class="nav-link <?= ($currentPage == 'laporan.php') ? 'active' : '' ?>">
                 <img src="<?= BASE_URL ?>/icon/graph-report0.png" class="sidebar-icon sidebar-icon-report">Laporan
             </a>
         </li>

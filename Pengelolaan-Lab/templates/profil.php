@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/../function/init.php';
 include 'header.php';
 include 'sidebar.php';
 
@@ -71,7 +71,7 @@ if ($user_id && $user_role) {
                     $dashboard_link = $base_url . 'dashboardKAUPT.php';
                 }
                 ?>
-                <li class="breadcrumb-item"><a href="<?= htmlspecialchars($dashboard_link) ?>">Sistem Pengelolaan Lab</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu/Menu PIC/dashboardPIC.php">Sistem Pengelolaan Lab</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Profil Akun</li>
             </ol>
         </nav>

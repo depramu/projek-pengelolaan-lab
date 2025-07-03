@@ -1,14 +1,15 @@
 <?php
 
-require_once __DIR__ . '/../function/auth.php';
+require_once __DIR__ . '/../../function/init.php';
 authorize_role('KA UPT');
 
-include '../templates/header.php';
-include '../templates/sidebar.php';
+include '../../templates/header.php';
+include '../../templates/sidebar.php';
 ?>
 
 <!-- Area Konten Utama Halaman Laporan -->
 <main class="col bg-white px-3 px-md-4 py-3 position-relative">
+<h3 class="fw-semibold mb-3">Laporan</h3>
   <div class="mb-3"> <!-- Container untuk breadcrumb, dengan margin bawah -->
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -118,5 +119,5 @@ include '../templates/sidebar.php';
 
 
 <?php
-include '../templates/footer.php';
+include '../../templates/footer.php';
 ?>

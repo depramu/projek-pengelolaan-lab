@@ -12,15 +12,15 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 $user_role = $_SESSION['user_role'] ?? '';
 switch ($user_role) {
     case 'PIC Aset':
-        $base_url = 'Menu PIC/';
+        $base_url = BASE_URL . '/Menu/Menu PIC/';
         $dashboard_link = $base_url . 'dashboardPIC.php';
         break;
     case 'KA UPT':
-        $base_url = 'Menu Ka UPT/';
-        $dashboard_link = $base_url . 'dashboardKaUPT.php';
+        $base_url = BASE_URL . '/Menu/Menu Ka UPT/';
+        $dashboard_link = $base_url . 'dashboardKAUPT.php';
         break;
     default:
-        $base_url = 'Menu Peminjam/';
+        $base_url = BASE_URL . '/Menu/Menu Peminjam/';
         $dashboard_link = $base_url . 'dashboardPeminjam.php';
         break;
 }
@@ -44,7 +44,7 @@ switch ($user_role) {
 
 <body class="bg-light">
     <div class="container-fluid min-vh-100 d-flex flex-column p-0">
-        <header class="d-flex align-items-center justify-content-between px-3 px-md-5 py-3">
+        <header class="d-flex align-items-center justify-content-between px-3 px-md-5 py-2">
             <div class="d-flex align-items-center">
                 <a href="<?= htmlspecialchars($dashboard_link) ?>">
                     <img src="<?= BASE_URL ?>/icon/logo0.png" class="sidebar-logo img-fluid" alt="Logo" />
@@ -53,9 +53,9 @@ switch ($user_role) {
             <div class="d-flex align-items-center">
             <div class="d-none d-md-block ps-3 ps-md-4" style="margin-right: 1vw;">
                     <div class="d-flex flex-column align-items-end">
-                        <span class="fw-semibold fs-3">Hello</span>
+                        <span class="fw-semibold fs-5">Halo Sobat,</span>
                     </div>
-                    <span class="fw-normal fs-6">
+                    <span class="fw-normal small">
                         <?php
                         echo htmlspecialchars($_SESSION['user_nama'] ?? 'Pengguna');
                         if (!empty($_SESSION['user_role'])) {
@@ -63,9 +63,10 @@ switch ($user_role) {
                         }
                         ?>
                     </span>
+                    </span>
                 </div>
-                <a href="<?= BASE_URL ?>templates/notif.php" class="me-0 me-2"><img src="<?= BASE_URL ?>/icon/bell.png" class="profile-img img-fluid" alt="Notif"></a>
-                <a href="<?= BASE_URL ?>templates/profil.php" class="me-2"><img src="<?= BASE_URL ?>/icon/vector0.svg" class="profile-img img-fluid" alt="Profil"></a>
+                <a href="<?= BASE_URL ?>/templates/notif.php" class="me-0 me-2"><img src="<?= BASE_URL ?>/icon/bell.png" class="profile-img img-fluid" alt="Notif"></a>
+                <a href="<?= BASE_URL ?>/templates/profil.php" class="me-2"><img src="<?= BASE_URL ?>/icon/vector0.svg" class="profile-img img-fluid" alt="Profil"></a>
                 <button class="btn btn-primary d-lg-none ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
                     <i class="bi bi-list"></i>
                 </button>
