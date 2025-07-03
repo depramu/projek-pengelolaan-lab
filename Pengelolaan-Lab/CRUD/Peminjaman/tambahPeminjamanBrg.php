@@ -1,13 +1,8 @@
 <?php
-
-require_once __DIR__ . '/../../function/auth.php';
+require_once __DIR__ . '/../../function/init.php';
 authorize_role(['Peminjam']);
 
 $showModal = false;
-
-include '../../templates/header.php';
-include '../../templates/sidebar.php';
-
 // Auto-generate ID Peminjaman Barang
 $idPeminjamanBrg = 'PJB001';
 $stmtId = sqlsrv_query($conn, "SELECT TOP 1 idPeminjamanBrg FROM Peminjaman_Barang WHERE idPeminjamanBrg LIKE 'PJB%' ORDER BY idPeminjamanBrg DESC");
@@ -32,9 +27,9 @@ if ($stmtDetail && $dataBarang = sqlsrv_fetch_array($stmtDetail, SQLSRV_FETCH_AS
 
 // Data sesi
 [$nim, $npk, $tglPeminjamanBrg] = [
-    $_SESSION['nim'] ?? "-",
-    $_SESSION['npk'] ?? "-",
-    $_SESSION['tglPeminjamanBrg'] ?? "-"
+    $_SESSION['nim'] ?? null,
+    $_SESSION['npk'] ?? null,
+    $_SESSION['tglPeminjamanBrg'] ?? null
 ];
 
 /// Inisialisasi variabel
@@ -80,6 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = "Gagal menambahkan peminjaman barang. Error: " . print_r(sqlsrv_errors(), true);
     }
 }
+
+include '../../templates/header.php';
+include '../../templates/sidebar.php';
+
 ?>
 
 <main class="col bg-white px-3 px-md-4 py-3 position-relative">
@@ -87,9 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu Peminjam/dashboardPeminjam.php">Sistem Pengelolaan Lab</a></li>
-                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu Peminjam/Peminjaman Barang/cekBarang.php">Cek Barang</a></li>
-                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu Peminjam/Peminjaman Barang/lihatBarang.php">Lihat Barang</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu/Menu Peminjam/dashboardPeminjam.php">Sistem Pengelolaan Lab</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu/Menu Peminjam/Peminjaman Barang/cekBarang.php">Cek Barang</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu/Menu Peminjam/Peminjaman Barang/lihatBarang.php">Lihat Barang</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Pengajuan Peminjaman Barang</li>
             </ol>
         </nav>
@@ -179,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between mt-4">
-                                <a href="<?= BASE_URL ?>/Menu Peminjam/Peminjaman Barang/lihatBarang.php" class="btn btn-secondary">Kembali</a>
+                                <a href="<?= BASE_URL ?>/Menu/Menu Peminjam/Peminjaman Barang/lihatBarang.php" class="btn btn-secondary">Kembali</a>
                                 <button type="submit" class="btn btn-primary">Ajukan Peminjaman</button>
                             </div>
                         </form>

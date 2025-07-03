@@ -1,8 +1,6 @@
 <?php
-require_once __DIR__ . '/../../function/auth.php'; // Muat fungsi otorisasi
+require_once __DIR__ . '/../../function/init.php'; // Penyesuaian: gunakan init.php untuk inisialisasi dan otorisasi
 authorize_role('PIC Aset'); // Lindungi halaman ini untuk role 'Peminjam'
-
-include '../../templates/header.php';
 
 $showModal = false;
 
@@ -30,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+include '../../templates/header.php';
 include '../../templates/sidebar.php';
 ?>
 
@@ -38,8 +37,8 @@ include '../../templates/sidebar.php';
     <div class="mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../../Menu PIC/dashboardPIC.php">Sistem Pengelolaan Lab</a></li>
-                <li class="breadcrumb-item"><a href="../../Menu PIC/manajemenAkunKry.php">Manajemen Akun Karyawan</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu/Menu PIC/dashboardPIC.php">Sistem Pengelolaan Lab</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu/Menu PIC/manajemenAkunKry.php">Manajemen Akun Karyawan</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Tambah Akun Karyawan</li>
             </ol>
         </nav>
@@ -110,7 +109,7 @@ include '../../templates/sidebar.php';
                             </div>
 
                             <div class="d-flex justify-content-between mt-4">
-                                <a href="../../Menu PIC/manajemenAkunKry.php" class="btn btn-secondary">Kembali</a>
+                                <a href="<?= BASE_URL ?>/Menu/Menu PIC/manajemenAkunKry.php" class="btn btn-secondary">Kembali</a>
                                 <button type="submit" class="btn btn-primary">Tambah</button>
                             </div>
                         </form>

@@ -112,39 +112,57 @@
             </div>
             <div class="modal-footer">
                 <a href="<?php
-                            $currentFile = basename($_SERVER['PHP_SELF']);
-                            if ($currentFile == 'tambahBarang.php' || $currentFile == 'editBarang.php') {
-                                echo BASE_URL . '/Menu PIC/manajemenBarang.php';
-                            } else if ($currentFile == 'tambahRuangan.php' || $currentFile == 'editRuangan.php') {
-                                echo BASE_URL . '/Menu PIC/manajemenRuangan.php';
-                            } else if ($currentFile == 'tambahPeminjamanBrg.php') {
-                                echo BASE_URL . '/Menu Peminjam/Riwayat Barang/riwayatBarang.php';
-                            } else if ($currentFile == 'tambahPeminjamanRuangan.php') {
-                                echo BASE_URL . '/Menu Peminjam/Riwayat Ruangan/riwayatRuangan.php';
-                            } else if ($currentFile == 'tambahPengembalian.php' || $currentFile == 'editPengembalian.php') {
-                                echo BASE_URL . '/Menu PIC/manajemenPengembalian.php';
-                            } else if ($currentFile == 'tambahAkunKry.php' || $currentFile == 'editAkunKry.php') {
-                                echo BASE_URL . '/Menu PIC/manajemenAkunKry.php';
-                            } else if ($currentFile == 'tambahAkunMhs.php' || $currentFile == 'editAkunMhs.php') {
-                                echo BASE_URL . '/Menu PIC/manajemenAkunMhs.php';
-                            } else if ($currentFile == 'pengajuanBarang.php') {
-                                echo BASE_URL . '/Menu PIC/Peminjaman Barang/peminjamanBarang.php';
-                            } else if ($currentFile == 'pengajuanRuangan.php') {
-                                echo BASE_URL . '/Menu PIC/Peminjaman Ruangan/peminjamanRuangan.php';
-                            } else if ($currentFile == 'pengembalianRuangan.php') {
-                                echo BASE_URL . '/Menu PIC/Peminjaman Ruangan/peminjamanRuangan.php';
-                            } else if ($currentFile == 'formDetailRuangan.php') {
-                                echo BASE_URL . '/Menu PIC/Peminjaman Ruangan/peminjamanRuangan.php';
-                            } else if ($currentFile == 'formDetailRiwayatRuangan.php') {
-                                echo BASE_URL . '/Menu Peminjam/Riwayat Ruangan/riwayatRuangan.php';
-                            } else if ($currentFile == 'pengembalianBarang.php') {
-                                echo BASE_URL . '/Menu PIC/Peminjaman Barang/peminjamanBarang.php';
-                            } else if ($currentFile == 'penolakanBarang.php') {
-                                echo BASE_URL . '/Menu PIC/Peminjaman Barang/peminjamanBarang.php';
-                            } else if ($currentFile == 'penolakanRuangan.php') {
-                                echo BASE_URL . '/Menu PIC/Peminjaman Ruangan/peminjamanRuangan.php';
-                            }
-                            ?>" class="btn btn-primary">OK</a>
+                    $currentFile = basename($_SERVER['PHP_SELF']);
+                    switch ($currentFile) {
+                        case 'tambahBarang.php':
+                        case 'editBarang.php':
+                            echo BASE_URL . '/Menu/Menu PIC/manajemenBarang.php';
+                            break;
+                        case 'tambahRuangan.php':
+                        case 'editRuangan.php':
+                            echo BASE_URL . '/Menu/Menu PIC/manajemenRuangan.php';
+                            break;
+                        case 'tambahPeminjamanBrg.php':
+                            echo BASE_URL . 'Menu/Menu Peminjam/Riwayat Barang/riwayatBarang.php';
+                            break;
+                        case 'tambahPeminjamanRuangan.php':
+                            echo BASE_URL . 'Menu/Menu Peminjam/Riwayat Ruangan/riwayatRuangan.php';
+                            break;
+                        case 'tambahPengembalian.php':
+                        case 'editPengembalian.php':
+                            echo BASE_URL . 'Menu/Menu PIC/manajemenPengembalian.php';
+                            break;
+                        case 'tambahAkunKry.php':
+                        case 'editAkunKry.php':
+                            echo BASE_URL . 'Menu/Menu PIC/manajemenAkunKry.php';
+                            break;
+                        case 'tambahAkunMhs.php':
+                        case 'editAkunMhs.php':
+                            echo BASE_URL . 'Menu/Menu PIC/manajemenAkunMhs.php';
+                            break;
+                        case 'pengajuanBarang.php':
+                            echo BASE_URL . 'Menu/Menu PIC/Peminjaman Barang/peminjamanBarang.php';
+                            break;
+                        case 'pengajuanRuangan.php':
+                        case 'pengembalianRuangan.php':
+                        case 'formDetailRuangan.php':
+                            echo BASE_URL . 'Menu/Menu PIC/Peminjaman Ruangan/peminjamanRuangan.php';
+                            break;
+                        case 'formDetailRiwayatRuangan.php':
+                            echo BASE_URL . 'Menu/Menu Peminjam/Riwayat Ruangan/riwayatRuangan.php';
+                            break;
+                        case 'pengembalianBarang.php':
+                        case 'penolakanBarang.php':
+                            echo BASE_URL . 'Menu/Menu PIC/Peminjaman Barang/peminjamanBarang.php';
+                            break;
+                        case 'penolakanRuangan.php':
+                            echo BASE_URL . 'Menu/Menu PIC/Peminjaman Ruangan/peminjamanRuangan.php';
+                            break;
+                        default:
+                            echo BASE_URL . '/';
+                            break;
+                    }
+                ?>" class="btn btn-primary">OK</a>
             </div>
         </div>
     </div>

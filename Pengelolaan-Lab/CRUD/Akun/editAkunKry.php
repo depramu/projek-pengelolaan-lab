@@ -1,8 +1,6 @@
 <?php
-require_once __DIR__ . '/../../function/auth.php'; // Muat fungsi otorisasi
+require_once __DIR__ . '/../../function/init.php'; // Penyesuaian: gunakan init.php untuk inisialisasi dan otorisasi
 authorize_role('PIC Aset'); // Lindungi halaman ini untuk role 'Peminjam'
-include '../../templates/header.php';
-
 
 $npk = $_GET['id'] ?? null;
 $showModal = false;
@@ -47,15 +45,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+include '../../templates/header.php';
 include '../../templates/sidebar.php';
 ?>
+
 <main class="col bg-white px-4 py-3 position-relative">
     <h3 class="fw-semibold mb-3">Manajemen Akun Karyawan</h3>
     <div class="mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../../Menu PIC/dashboardPIC.php">Sistem Pengelolaan Lab</a></li>
-                <li class="breadcrumb-item"><a href="../../Menu PIC/manajemenAkunKry.php">Manajemen Akun Karyawan</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu/Menu PIC/dashboardPIC.php">Sistem Pengelolaan Lab</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu/Menu PIC/manajemenAkunKry.php">Manajemen Akun Karyawan</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Edit Akun Karyawan</li>
             </ol>
         </nav>
@@ -110,7 +110,7 @@ include '../../templates/sidebar.php';
                                     <input type="password" class="form-control protect-input d-block bg-light" id="kataSandi" name="kataSandi" value="<?= htmlspecialchars($data['kataSandi']) ?>">
                                 </div>
                                 <div class="d-flex justify-content-between mt-4">
-                                    <a href="../../Menu PIC/manajemenAkunKry.php" class="btn btn-secondary">Kembali</a>
+                                    <a href="<?= BASE_URL ?>/Menu/Menu PIC/manajemenAkunKry.php" class="btn btn-secondary">Kembali</a>
                                     <button type="submit" class="btn btn-primary">Simpan</button>
                                 </div>
                         </form>

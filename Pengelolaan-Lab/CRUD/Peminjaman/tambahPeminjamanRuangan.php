@@ -1,28 +1,48 @@
 <?php
-require_once __DIR__ . '/../../function/auth.php';
+require_once __DIR__ . '/../../function/init.php';
 authorize_role(['Peminjam']);
 
-include '../../templates/header.php';
+// Cek apakah data penting dari alur sebelumnya ada di session
+if (empty($_SESSION['tglPeminjamanRuangan']) || empty($_SESSION['waktuMulai'])) {
+    // Jika tidak ada, berarti pengguna belum memilih tanggal.
+    // Arahkan kembali ke halaman pengecekan.
+    header('Location: ' . BASE_URL . '/Menu/Menu Peminjam/Peminjaman Ruangan/cekRuangan.php');
+    exit; // Wajib ada exit setelah header location
+}
 
+// Jika lolos pengecekan, baru ambil datanya
 $idRuangan = $_GET['idRuangan'] ?? null;
 if (empty($idRuangan)) {
-    die("Error: ID Ruangan tidak ditemukan. Silakan kembali dan pilih ruangan yang ingin dipinjam.");
+    die("Error: ID Ruangan tidak ditemukan.");
 }
 
-$namaRuangan = '';
-$sqlNama = "SELECT namaRuangan FROM Ruangan WHERE idRuangan = ?";
-$params = [$idRuangan];
-$stmtNama = sqlsrv_query($conn, $sqlNama, $params);
-
-if ($stmtNama === false) {
-    die(print_r(sqlsrv_errors(), true));
-}
-
-if ($rowNama = sqlsrv_fetch_array($stmtNama, SQLSRV_FETCH_ASSOC)) {
-    $namaRuangan = $rowNama['namaRuangan'];
+// Ambil nama ruangan dari database
+$namaRuangan = null;
+$sqlNamaRuangan = "SELECT namaRuangan FROM Ruangan WHERE idRuangan = ?";
+$stmtNamaRuangan = sqlsrv_query($conn, $sqlNamaRuangan, [$idRuangan]);
+if ($stmtNamaRuangan && $rowNamaRuangan = sqlsrv_fetch_array($stmtNamaRuangan, SQLSRV_FETCH_ASSOC)) {
+    $namaRuangan = $rowNamaRuangan['namaRuangan'];
 } else {
-    echo "<div style='color:orange;'>Tidak ada ruangan dengan ID: $idRuangan</div>";
+    die("Error: Nama ruangan tidak ditemukan untuk ID tersebut.");
 }
+
+
+// Ambil data dari session (sekarang kita yakin datanya ada)
+$tglPeminjamanRuangan = $_SESSION['tglPeminjamanRuangan'];
+$waktuMulai = $_SESSION['waktuMulai'];
+$waktuSelesai = $_SESSION['waktuSelesai'];
+$nim = $_SESSION['nim'] ?? null;
+$npk = $_SESSION['npk'] ?? null;
+
+
+[$nim, $npk, $tglPeminjamanRuangan] = [
+    $_SESSION['nim'] ?? null,
+    $_SESSION['npk'] ?? null,
+    $_SESSION['tglPeminjamanRuangan'] ?? '-'
+];
+$waktuMulai = $_SESSION['waktuMulai'] ?? null;
+$waktuSelesai = $_SESSION['waktuSelesai'] ?? null;
+
 
 
 // Auto-generate id Peminjaman Ruangan
@@ -38,62 +58,67 @@ if ($stmtId && $rowId = sqlsrv_fetch_array($stmtId, SQLSRV_FETCH_ASSOC)) {
 
 $showModal = false;
 $error = null;
-$nim = $_SESSION['nim'] ?? '-';
-$npk = $_SESSION['npk'] ?? '-';
 
-// Ambil data dari session
-$tglPeminjamanRuangan = $_SESSION['tglPeminjamanRuangan'] ?? null; // Format: d-m-Y
-$waktuMulai = $_SESSION['waktuMulai'] ?? null; // Format: H:i
-$waktuSelesai = $_SESSION['waktuSelesai'] ?? null; // Format: H:i
+// Penyesuaian proses submit form peminjaman ruangan
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $alasanPeminjamanRuangan = trim($_POST['alasanPeminjamanRuangan'] ?? '');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $alasanPeminjamanRuangan = $_POST['alasanPeminjamanRuangan'];
-
-    if (empty($alasanPeminjamanRuangan)) {
+    if ($alasanPeminjamanRuangan === '') {
         $error = "Alasan peminjaman ruangan tidak boleh kosong";
     } else {
-        $tglForSQL = DateTime::createFromFormat('d-m-Y', $tglPeminjamanRuangan)->format('d-m-y');
-        $waktuMulaiForSQL = DateTime::createFromFormat('H:i', $waktuMulai)->format('H:i:s');
-        $waktuSelesaiForSQL = DateTime::createFromFormat('H:i', $waktuSelesai)->format('H:i:s');
+        // Format tanggal dan waktu sebelum insert
+        $tglForSQL = null;
+        $waktuMulaiForSQL = null;
+        $waktuSelesaiForSQL = null;
 
-        // Query INSERT dengan data yang sudah diformat
-        $query = "INSERT INTO Peminjaman_Ruangan (idPeminjamanRuangan, idRuangan, nim, npk, tglPeminjamanRuangan, waktuMulai, waktuSelesai, alasanPeminjamanRuangan, statusPeminjaman) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $params = [
+        if ($tglPeminjamanRuangan) {
+            $dateObj = DateTime::createFromFormat('d-m-Y', $tglPeminjamanRuangan);
+            $tglForSQL = $dateObj ? $dateObj->format('d-m-y') : null;
+        }
+        if ($waktuMulai) {
+            $waktuMulaiForSQL = $waktuMulai;
+        }
+        if ($waktuSelesai) {
+            $waktuSelesaiForSQL = $waktuSelesai;
+        }
+
+        // Query INSERT ke tabel Peminjaman_Ruangan
+        $queryInsert = "INSERT INTO Peminjaman_Ruangan 
+            (idPeminjamanRuangan, idRuangan, tglPeminjamanRuangan, nim, npk, waktuMulai, waktuSelesai, alasanPeminjamanRuangan, statusPeminjaman) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $paramsInsert = [
             $idPeminjamanRuangan,
             $idRuangan,
+            $tglForSQL,
             $nim,
             $npk,
-            $tglForSQL, // Gunakan tanggal yang sudah diformat
-            $waktuMulaiForSQL, // Gunakan waktu mulai yang sudah diformat
-            $waktuSelesaiForSQL, // Gunakan waktu selesai yang sudah diformat
+            $waktuMulaiForSQL,
+            $waktuSelesaiForSQL,
             $alasanPeminjamanRuangan,
             'Menunggu Persetujuan'
         ];
-        $stmtPeminjamanRuangan = sqlsrv_query($conn, $query, $params);
-        if ($stmtPeminjamanRuangan) {
-            // Jika INSERT peminjaman berhasil, baru UPDATE status ruangan
+
+        $stmtInsert = sqlsrv_query($conn, $queryInsert, $paramsInsert);
+
+        if ($stmtInsert) {
+            // Update status ketersediaan ruangan jika insert berhasil
             $ketersediaanQuery = "UPDATE Ruangan SET ketersediaan = 'Tidak Tersedia' WHERE idRuangan = ?";
-            $paramsKetersediaan = [$idRuangan];
-
-            $stmtKetersediaan = sqlsrv_query($conn, $ketersediaanQuery, $paramsKetersediaan);
-
-            if ($stmtKetersediaan) {
-                // Jika UPDATE juga berhasil, tampilkan modal sukses
+            $stmtUpdate = sqlsrv_query($conn, $ketersediaanQuery, [$idRuangan]);
+            if ($stmtUpdate) {
                 $showModal = true;
             } else {
-                // Kondisi jarang: Insert berhasil, tapi update gagal. Beri pesan error.
                 $error = "Peminjaman berhasil dicatat, tetapi gagal memperbarui status ruangan. Error: " . print_r(sqlsrv_errors(), true);
             }
         } else {
-            // Jika INSERT gagal, berikan pesan error yang jelas
             $error = "Gagal mengajukan peminjaman ruangan. Error: " . print_r(sqlsrv_errors(), true);
         }
     }
-    if ($error) {
-        echo "<div class='alert alert-danger'>$error</div>";
+    if (!empty($error)) {
+        echo "<div class='alert alert-danger'>{$error}</div>";
     }
 }
 
+include '../../templates/header.php';
 include '../../templates/sidebar.php';
 ?>
 
@@ -102,9 +127,9 @@ include '../../templates/sidebar.php';
     <div class="mb-2">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu Peminjam/dashboardPeminjam.php">Sistem Pengelolaan Lab</a></li>
-                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu Peminjam/Peminjaman Ruangan/cekRuangan.php">Cek Ruangan</a></li>
-                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu Peminjam/Peminjaman Ruangan/lihatRuangan.php">Lihat Ruangan</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu/Menu Peminjam/dashboardPeminjam.php">Sistem Pengelolaan Lab</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu/Menu Peminjam/Peminjaman Ruangan/cekRuangan.php">Cek Ruangan</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu/Menu Peminjam/Peminjaman Ruangan/lihatRuangan.php">Lihat Ruangan</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Pengajuan Peminjaman Ruangan</li>
             </ol>
         </nav>
@@ -153,8 +178,11 @@ include '../../templates/sidebar.php';
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-2">
-                                        <label for="tglPeminjamanRuangan" class="form-label fw-semibold">Tanggal Peminjaman</label>
-                                        <input type="text" class="form-control protect-input" id="tglPeminjamanRuangan" name="tglPeminjamanRuangan" value="<?= $tglPeminjamanRuangan ?>">
+                                        <label class="form-label fw-semibold">Tanggal Peminjaman</label>
+                                        <input type="text" class="form-control protect-input" name="tglDisplay" value="<?php if (!empty($tglPeminjamanRuangan)) {
+                                                                                                                            $dateObj = DateTime::createFromFormat('Y-m-d', $tglPeminjamanRuangan);
+                                                                                                                            echo $dateObj ? $dateObj->format('d-m-Y') : htmlspecialchars($tglPeminjamanRuangan);
+                                                                                                                        } ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -188,7 +216,7 @@ include '../../templates/sidebar.php';
                             </div>
 
                             <div class="d-flex justify-content-between mt-5">
-                                <a href="<?= BASE_URL ?>/Menu Peminjam/Peminjaman Ruangan/lihatRuangan.php" class="btn btn-secondary">Kembali</a>
+                                <a href="<?= BASE_URL ?>/Menu/Menu Peminjam/Peminjaman Ruangan/lihatRuangan.php" class="btn btn-secondary">Kembali</a>
                                 <button type="submit" class="btn btn-primary">Ajukan Peminjaman</button>
                             </div>
                             </fobuat>
@@ -205,4 +233,3 @@ include '../../templates/sidebar.php';
 <?php
 include '../../templates/footer.php';
 ?>
-

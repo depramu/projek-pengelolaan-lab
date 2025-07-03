@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../config.php';
 
 function authorize_role($allowed_roles) {
     // Pastikan session sudah dimulai

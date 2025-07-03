@@ -1,9 +1,8 @@
 <?php
-include '../../templates/header.php';
+require_once __DIR__ . '/../../function/init.php'; // Penyesuaian: gunakan init.php untuk inisialisasi dan otorisasi
 
 $showModal = false;
 
-// Generate ID Barang otomatis (BRG001, BRG002, dst)
 $idBarang = 'BRG001';
 $sqlId = "SELECT TOP 1 idBarang FROM Barang WHERE idBarang LIKE 'BRG%' ORDER BY idBarang DESC";
 $stmtId = sqlsrv_query($conn, $sqlId);
@@ -14,7 +13,6 @@ if ($stmtId && $rowId = sqlsrv_fetch_array($stmtId, SQLSRV_FETCH_ASSOC)) {
     $idBarang = 'BRG' . str_pad($newNum, 3, '0', STR_PAD_LEFT);
 }
 
-// Ambil daftar lokasi (idRuangan) dari tabel Ruangan
 $lokasiList = [];
 $sqlLokasi = "SELECT idRuangan FROM Ruangan";
 $stmtLokasi = sqlsrv_query($conn, $sqlLokasi);
@@ -49,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
+include '../../templates/header.php';
 include '../../templates/sidebar.php';
 ?>
 
@@ -57,8 +56,8 @@ include '../../templates/sidebar.php';
     <div class="mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../../Menu PIC/dashboardPIC.php">Sistem Pengelolaan Lab</a></li>
-                <li class="breadcrumb-item"><a href="../../Menu PIC/manajemenBarang.php">Manajemen Barang</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu/Menu PIC/dashboardPIC.php">Sistem Pengelolaan Lab</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/Menu/Menu PIC/manajemenBarang.php">Manajemen Barang</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Tambah Barang</li>
             </ol>
         </nav>
@@ -127,7 +126,7 @@ include '../../templates/sidebar.php';
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between mt-4">
-                                <a href="../../Menu PIC/manajemenBarang.php" class="btn btn-secondary">Kembali</a>
+                                <a href="../../../Menu/Menu PIC/manajemenBarang.php" class="btn btn-secondary">Kembali</a>
                                 <button type="submit" class="btn btn-primary">Tambah</button>
                             </div>
                         </form>
