@@ -1,0 +1,504 @@
+/* =================================================================
+ * PENGELOLAAN LAB - STYLESHEET UTAMA
+ * Deskripsi: Gabungan semua gaya CSS dari berbagai file PHP.
+ * ================================================================= */
+
+/* --- Gaya Global & Body (dari header.php & login.php) --- */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa; /* Warna latar belakang umum */
+    margin: 0;
+    padding: 0;
+  }
+  
+  body, html {
+    height: 100%;
+  }
+  
+  /* --- Gaya Halaman Login & Lupa Sandi (dari Login/login.php & Login/LupaSandi.php) --- */
+  .container-login {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .login-left {
+    background: #fff;
+    padding: 48px;
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+  
+  .login-right {
+    background: #065ba6;
+    flex-basis: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    box-sizing: border-box;
+  }
+  
+  .login-form-container {
+    width: 100%;
+    max-width: 380px;
+    margin-top: 40px;
+  }
+  
+  .login-form-title {
+    color: #fff;
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin-bottom: 35px;
+    text-align: center;
+  }
+  
+  .login-form-container .form-label {
+    color: #e0e0e0;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  .login-form-container .input-group {
+    margin-bottom: 20px;
+  }
+  
+  .login-form-container .input-group-text {
+    background-color: #fff;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    padding: 0 15px;
+    color: #6c757d;
+  }
+  
+  .login-form-container .input-group-text img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .login-form-container .form-control {
+    background-color: #fff;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    height: 50px;
+    padding-left: 15px;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .login-form-container .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    background-color: #fff;
+    border: none;
+  }
+  
+  .login-form-container .forgot-link {
+    color: #bfe4ff;
+    font-size: 0.9rem;
+    text-align: right;
+    display: block;
+    margin-top: -10px;
+    margin-bottom: 30px;
+    text-decoration: none;
+  }
+  
+  .login-form-container .forgot-link:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+  
+  .btn-login-submit {
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 0;
+      font-size: 1rem;
+      font-weight: 600;
+      width: 150px;
+      display: block;
+      margin: 0 auto 15px auto;
+      transition: background-color 0.3s ease;
+  }
+  
+  .btn-login-submit:hover {
+      background-color: #218838;
+  }
+  
+  .login-form-container .alert-danger {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  
+  
+  
+  /* --- Gaya Halaman Pilih Role (dari index.php) --- */
+  .role-container {
+    height: 100vh;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+  }
+  
+  .role-card {
+    background: #fff;
+    overflow: hidden;
+    display: flex;
+    max-width: 100vw;
+    height: 100vh;
+    width: 100%;
+    animation: slideIn 1s ease-out;
+  }
+  
+  .role-left {
+    background: #fff;
+    padding: 48px;
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: fadeInLeft 1.2s ease-out 0.3s both;
+  }
+  
+  .role-logo {
+    width: 60px;
+    margin-bottom: 16px;
+    animation: bounceIn 1s ease-out 0.6s both;
+  }
+  
+  .role-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #065ba6;
+    margin-bottom: 24px;
+    text-align: center;
+    animation: fadeInUp 1s ease-out 0.9s both;
+  }
+  
+  .role-illustration {
+    width: 260px;
+    min-width: 160px;
+    margin-bottom: 0;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .icon-role-img {
+    width: 180px;
+    margin-top: 18px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  
+  .role-right {
+    background: #065ba6;
+    color: #fff;
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: fadeInRight 1.2s ease-out 0.3s both;
+  }
+  
+  .role-right h3 {
+    font-weight: 600;
+    margin-bottom: 32px;
+    font-size: 2rem;
+    animation: fadeInDown 1s ease-out 0.6s both;
+  }
+  
+  .role-btn {
+    width: 25rem;
+    margin-bottom: 22px;
+    font-weight: 500;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    padding: 10px;
+    transition: all 0.3s ease;
+    animation: slideInUp 0.8s ease-out both;
+  }
+  
+  .role-btn:nth-child(2) { animation-delay: 0.9s; }
+  .role-btn:nth-child(3) { animation-delay: 1.1s; }
+  .role-btn:nth-child(4) { animation-delay: 1.3s; }
+  
+  .role-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Keyframes Animations */
+  @keyframes slideIn { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+  @keyframes fadeInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  
+  
+  /* --- Gaya Aplikasi Utama (dari header.php & sidebar.php) --- */
+  .sidebar-logo {
+    width: 180px;
+    height: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .sidebar {
+    background: #065ba6;
+    height: 82vh;
+    border-radius: 12px;
+    width: 278px;
+  }
+  
+  .sidebar .nav-link {
+    color: #fff;
+    font-weight: 500;
+  }
+  
+  .sidebar .nav-link.active,
+  .sidebar .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+  
+  .sidebar .nav-link img {
+    width: 30px;
+    margin-right: 10px;
+    object-fit: contain;
+  }
+  
+  .profile-img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    margin-left: 10px;
+  }
+  
+  main {
+    margin-left: 3vh;
+    margin-right: 3vh;
+    border-radius: 12px;
+    height: 82vh;
+  }
+  
+  .fixed-pagination {
+    position: fixed;
+    bottom: 4rem;
+    left: 14rem;
+    width: calc(100% - 280px);
+  }
+  
+  .fixed-pagination .pagination {
+    margin-bottom: 0;
+  }
+  
+  .sidebar .collapse .nav-link {
+    color: #ffffff !important;
+    background-color: transparent !important;
+  }
+  
+  .sidebar .collapse .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+  }
+  
+  .sidebar .collapse .nav-link.active-submenu {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    font-weight: 500;
+  }
+  
+  .atoy-img {
+    width: clamp(100px, 15vw, 160px);
+    height: auto;
+    position: absolute;
+    right: clamp(30px, 5vw, 60px);
+    bottom: clamp(15px, 3vh, 30px);
+  }
+  
+  .scrollable-card-content {
+    max-height: 58vh;
+    overflow-y: auto;
+  }
+  
+  .protect-input {
+    background-color: #f8f9fa !important; /* Agar lebih kuat dari aturan lain */
+    border: 1px solid #ced4da;
+    color: rgb(41, 42, 44);
+    cursor: not-allowed; /* Tambahkan cursor untuk menandakan tidak bisa diubah */
+  }
+  
+  /* Gaya dari sidebar.php */
+  .sidebar-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  
+  .sidebar-icon-report {
+    width: 32px !important;
+    height: 32px !important;
+    object-fit: contain;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  
+  .nav-link.active,
+  .offcanvas .nav-link.active {
+    background: #2563eb !important;
+    color: #fff !important;
+  }
+  
+  .collapse .nav-link.active,
+  .offcanvas .collapse .nav-link.active {
+    background: #1d4ed8 !important;
+    color: #fff !important;
+  }
+  
+  .aksi-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    vertical-align: middle;
+  }
+  
+  .td-aksi {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .td-aksi a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .td-aksi a:hover .aksi-icon {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  /* --- Media Queries & Responsif --- */
+  
+  /* Offcanvas (Sidebar mobile) */
+  @media (max-width: 991.98px) {
+    .offcanvas-start {
+      background: linear-gradient(135deg, rgb(18, 99, 180) 60%, #e0e7ef 100%);
+      border-right: 1.5px solid #d1d5db;
+      min-width: 220px;
+      max-width: 85vw;
+      box-shadow: 2px 0 16px 0 rgba(0, 0, 0, 0.07);
+    }
+    .offcanvas-header {
+      background: #f1f5f9;
+      border-bottom: 1px solid #e5e7eb;
+      padding-top: 1.2rem;
+      padding-bottom: 1.2rem;
+    }
+    .offcanvas-title {
+      font-weight: 600;
+      color: #1e293b;
+      letter-spacing: 0.5px;
+    }
+    .offcanvas-body {
+      padding: 0.5rem 0.5rem 1rem 0.5rem !important;
+    }
+    .offcanvas .nav-link {
+      border-radius: 8px;
+      margin-bottom: 0.3rem;
+      font-size: 1.08rem;
+      color: rgb(255, 255, 255);
+      transition: background 0.15s, color 0.15s;
+      padding: 0.65rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .offcanvas .nav-link:hover {
+      background: rgb(7, 120, 249);
+      color: rgb(221, 221, 221);
+    }
+    .offcanvas .nav-item.mt-auto {
+      margin-top: 2.5rem !important;
+    }
+    .offcanvas .collapse .nav-link {
+      padding-left: 2.2rem;
+      font-size: 0.98rem;
+    }
+    .offcanvas .bi-chevron-down {
+      font-size: 1.1rem;
+      color: rgb(255, 255, 255);
+      transition: transform 0.2s;
+    }
+    .offcanvas .nav-link[aria-expanded="true"] .bi-chevron-down {
+      transform: rotate(180deg);
+    }
+    .sidebar {
+      border-radius: 0;
+      height: 100vh;
+    }
+    .atoy-img {
+      display: none !important;
+    }
+  }
+  
+  /* Tampilan kecil (Mobile) */
+  @media (max-width: 767.98px) {
+    header.d-flex {
+      padding: 0.5rem !important;
+    }
+    header .fw-semibold.fs-3 {
+      font-size: 1.1rem !important;
+    }
+    header .fw-normal.fs-6 {
+      font-size: 0.9rem !important;
+    }
+    .sidebar-logo {
+      width: 110px;
+      margin: 0.5rem 0 0.5rem 2rem;
+    }
+    .profile-img {
+      width: 24px;
+      height: 24px;
+      margin-left: 5px;
+    }
+    main {
+      height: 90vh;
+    }
+    main nav {
+      font-size: 0.8rem;
+    }
+    .role-card, .container-login {
+      flex-direction: column;
+      max-width: 100vw;
+      height: auto;
+      min-height: 100vh;
+    }
+    .role-left, .role-right, .login-left, .login-right {
+      border-radius: 0;
+      padding: 32px 10px;
+      height: auto;
+      min-height: 0;
+      flex-basis: auto;
+    }
+    .role-title {
+      font-size: 1.2rem;
+    }
+    .role-btn {
+      width: 90%;
+    }
+  }

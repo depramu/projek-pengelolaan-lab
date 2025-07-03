@@ -1543,7 +1543,7 @@ function setupFormEditAkunKry() {
         document.getElementById("confirmModal")
       );
       document.getElementById("confirmAction").textContent =
-        "mengubah data akun karyawan";
+        "mengubah data  akun karyawan";
       document.getElementById("confirmYes").onclick = () => form.submit();
       confirmModal.show();
     }

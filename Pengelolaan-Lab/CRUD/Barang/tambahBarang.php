@@ -73,7 +73,7 @@ include '../../templates/sidebar.php';
         <?php endif; ?>
 
         <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-12 " style="margin-right: 20px;">
+            <div class="col-md-8 col-lg-12" style="margin-right: 20px;">
                 <div class="card border border-dark">
                     <div class="card-header bg-white border-bottom border-dark">
                         <span class="fw-bold">Tambah Barang</span>

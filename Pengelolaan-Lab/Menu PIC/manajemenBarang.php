@@ -40,6 +40,7 @@ include '../templates/sidebar.php';
         <a href="<?= BASE_URL ?>/CRUD/Barang/tambahBarang.php" class="btn btn-primary">
             <img src="<?= BASE_URL ?>/icon/tambah.svg" alt="tambah" class="me-2">Tambah Barang</a>
     </div>
+    
     <div class="table-responsive">
         <table class="table table-hover align-middle table-bordered">
             <thead class="table-light">

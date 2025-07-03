@@ -119,7 +119,7 @@ include '../../templates/sidebar.php';
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-2">
-                                        <label for="idPeminjamanRuangan" class="form-label fw-semibold">ID Peminjaman Ruangan</label>
+                                        <label for="idPeminjamanRuangan" class="form-label fw-semibold">ID Peminjaman</label>
                                         <input type="text" class="form-control protect-input" id="idPeminjamanRuangan" name="idPeminjamanRuangan" value="<?= $idPeminjamanRuangan ?>">
                                     </div>
                                 </div>

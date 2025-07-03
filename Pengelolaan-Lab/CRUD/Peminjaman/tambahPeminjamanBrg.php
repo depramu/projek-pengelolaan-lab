@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-2">
-                                        <label for="idPeminjamanBrg" class="form-label fw-bold">ID Peminjaman Barang</label>
+                                        <label for="idPeminjamanBrg" class="form-label fw-bold">ID Peminjaman</label>
                                         <input type="text" class="form-control protect-input d-block bg-light" id="idPeminjamanBrg" name="idPeminjamanBrg_display" value="<?= $idPeminjamanBrg ?>">
                                     </div>
                                 </div>
