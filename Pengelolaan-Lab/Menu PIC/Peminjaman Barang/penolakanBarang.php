@@ -1,8 +1,8 @@
 <?php
-require_once '../../auth.php'; // Muat fungsi otorisasi
-authorize_role('PIC Aset'); // Lindungi halaman ini untuk role 'Peminjam'
+require_once __DIR__ . '/../../function/auth.php';
+authorize_role('PIC Aset');
 include '../../templates/header.php';
-include '../../koneksi.php';
+require_once '../../koneksi.php';
 
 $idPeminjamanBrg = $_GET['id'] ?? '';
 $data = [];

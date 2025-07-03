@@ -1,7 +1,9 @@
 <?php
-// Memanggil header.php. Ini akan menangani session_start(), koneksi ke DB, validasi login,
+
+require_once __DIR__ . '/../function/auth.php';
+authorize_role('KA UPT');
+
 include '../templates/header.php';
-// Memanggil sidebar.php. Ini akan merender menu navigasi samping sesuai peran pengguna (KaUPT).
 include '../templates/sidebar.php';
 ?>
 
@@ -114,12 +116,7 @@ include '../templates/sidebar.php';
   </div>
 </div>
 
-<!-- Menyertakan library JavaScript SheetJS dari CDN untuk fungsionalitas export ke Excel -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
-
 
 <?php
-// Memanggil footer.php yang akan menutup tag HTML dan memuat skrip global lainnya.
 include '../templates/footer.php';
 ?>

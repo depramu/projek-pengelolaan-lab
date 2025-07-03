@@ -92,7 +92,7 @@ if (!empty($idPeminjamanRuangan)) {
                                             <input type="hidden" class="form-control" value="<?= ($data['tglPeminjamanRuangan'] instanceof DateTime) ? $data['tglPeminjamanRuangan']->format('d F Y') : '' ?>">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label fw-bold">Alasan Peminjaman</label>
+                                            <label class="form-label fw-semibold">Alasan Peminjaman</label>
                                             <div class="form-control-plaintext"><?= htmlspecialchars($data['alasanPeminjamanRuangan']) ?></div>
                                             <textarea class="form-control" rows="3" hidden><?= htmlspecialchars($data['alasanPeminjamanRuangan']) ?></textarea>
                                         </div>
@@ -148,8 +148,6 @@ if (!empty($idPeminjamanRuangan)) {
                                         </div>
                                     </div>
                                 </div>
-
-
                                 <div class="d-flex justify-content-between mt-3">
                                     <a href="<?= BASE_URL ?>/Menu PIC/Peminjaman Ruangan/peminjamanRuangan.php" class="btn btn-secondary me-2">Kembali</a>
                                 </div>

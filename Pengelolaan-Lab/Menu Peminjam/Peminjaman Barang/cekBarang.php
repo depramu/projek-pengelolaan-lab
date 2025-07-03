@@ -1,9 +1,10 @@
 <?php
+
+require_once __DIR__ . '/../../function/auth.php';
+authorize_role(['Peminjam']);
+
 require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/../../koneksi.php';
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
 
 if (isset($_POST['submit'])) {
     // Pastikan tanggal tidak kosong sebelum redirect

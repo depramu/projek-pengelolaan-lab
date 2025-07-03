@@ -1,6 +1,6 @@
 <?php
-require_once '../../auth.php';
-authorize_role('PIC Aset');
+require_once __DIR__ . '/../../function/auth.php';
+    authorize_role('PIC Aset');
 include '../../templates/header.php';
 include '../../koneksi.php';
 

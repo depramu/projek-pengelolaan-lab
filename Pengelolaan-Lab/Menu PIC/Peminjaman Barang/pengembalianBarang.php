@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../auth.php';
+require_once __DIR__ . '/../../function/auth.php';
 authorize_role('PIC Aset');
 require_once '../../koneksi.php';
 

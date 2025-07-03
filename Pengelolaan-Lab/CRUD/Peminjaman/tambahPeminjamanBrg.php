@@ -1,5 +1,8 @@
 <?php
-// $error = null;
+
+require_once __DIR__ . '/../../function/auth.php';
+authorize_role(['Peminjam']);
+
 $showModal = false;
 
 include '../../templates/header.php';
@@ -29,9 +32,9 @@ if ($stmtDetail && $dataBarang = sqlsrv_fetch_array($stmtDetail, SQLSRV_FETCH_AS
 
 // Data sesi
 [$nim, $npk, $tglPeminjamanBrg] = [
-    $_SESSION['nim'] ?? null,
-    $_SESSION['npk'] ?? null,
-    $_SESSION['tglPeminjamanBrg'] ?? null
+    $_SESSION['nim'] ?? "-",
+    $_SESSION['npk'] ?? "-",
+    $_SESSION['tglPeminjamanBrg'] ?? "-"
 ];
 
 /// Inisialisasi variabel
@@ -52,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Ubah format tanggal sebelum insert
     if ($tglPeminjamanBrg) {
         $dateObj = DateTime::createFromFormat('d-m-Y', $tglPeminjamanBrg);
-        $tglPeminjamanBrgSQL = $dateObj ? $dateObj->format('Y-m-d') : null;
+        $tglPeminjamanBrgSQL = $dateObj ? $dateObj->format('d-m-y') : null;
     } else {
         $tglPeminjamanBrgSQL = null;
     }
@@ -111,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-2">
-                                        <label for="idPeminjamanBrg" class="form-label fw-bold">ID Peminjaman</label>
+                                        <label for="idPeminjamanBrg" class="form-label fw-semibold">ID Peminjaman</label>
                                         <input type="text" class="form-control protect-input d-block bg-light" id="idPeminjamanBrg" name="idPeminjamanBrg_display" value="<?= $idPeminjamanBrg ?>">
                                     </div>
                                 </div>
@@ -132,8 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-md-6">
                                     <div class="mb-2">
                                         <label for="nim" class="form-label fw-semibold">NIM</label>
-                                        <input type="text" class="form-control protect-input d-block bg-light" id="nim" name="nim_display"
-                                            value="<?= isset($_SESSION['nim']) ? htmlspecialchars($_SESSION['nim']) : '' ?>">
+                                        <input type="text" class="form-control protect-input" id="nim" name="nim" value="<?= $nim ?>">
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="mb-2">
                                         <label class="form-label fw-semibold">Tanggal Peminjaman</label>
                                         <input type="text" class="form-control protect-input d-block bg-light" name="tglDisplay" value="<?php if (!empty($tglPeminjamanBrg)) {
-                                                                                                                                            $dateObj = DateTime::createFromFormat('Y-m-d', $tglPeminjamanBrg);
+                                                                                                                                            $dateObj = DateTime::createFromFormat('d-m=y', $tglPeminjamanBrg);
                                                                                                                                             echo $dateObj ? $dateObj->format('d-m-Y') : htmlspecialchars($tglPeminjamanBrg);
                                                                                                                                         } ?>">
                                     </div>
@@ -150,8 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-md-6">
                                     <div class="mb-2">
                                         <label for="npk" class="form-label fw-semibold">NPK</label>
-                                        <input type="text" class="form-control protect-input d-block bg-light" id="npk" name="npk_display"
-                                            value="<?= isset($_SESSION['npk']) ? htmlspecialchars($_SESSION['npk']) : '' ?>">
+                                        <input type="text" class="form-control protect-input" id="npk" name="npk" value="<?= $npk ?>">
                                     </div>
                                 </div>
                             </div>

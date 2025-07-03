@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../../function/auth.php';
+authorize_role(['Peminjam']);
 
 include '../../templates/header.php';
 include '../../templates/sidebar.php';
@@ -68,7 +70,7 @@ if (isset($_GET['idPeminjamanBrg'])) {
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label fw-semibold">ID Peminjaman Barang</label>
+                                            <label class="form-label fw-semibold">ID Peminjaman</label>
                                             <div class="form-control-plaintext"><?= htmlspecialchars($data['idPeminjamanBrg']) ?></div>
                                             <input type="hidden" name="idPeminjamanBrg" class="form-control" value="<?= htmlspecialchars($data['idPeminjamanBrg']) ?>">
                                         </div>
@@ -77,18 +79,6 @@ if (isset($_GET['idPeminjamanBrg'])) {
                                             <div class="form-control-plaintext"><?= htmlspecialchars($data['nim'] ?: $data['npk'] ?: '-') ?></div>
                                             <input type="hidden" class="form-control" value="<?= htmlspecialchars($data['nim'] ?: $data['npk'] ?: '-') ?>">
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">ID Barang</label>
-                                            <div class="form-control-plaintext"><?= htmlspecialchars($data['idBarang']) ?></div>
-                                            <input type="hidden" class="form-control" value="<?= htmlspecialchars($data['idBarang']) ?>">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">Nama Barang</label>
-                                            <div class="form-control-plaintext"><?= htmlspecialchars($data['namaBarang']) ?></div>
-                                            <input type="hidden" class="form-control" value="<?= htmlspecialchars($data['namaBarang']) ?>">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label fw-semibold">Tanggal Peminjaman</label>
                                             <div class="form-control-plaintext">
@@ -99,10 +89,27 @@ if (isset($_GET['idPeminjamanBrg'])) {
                                                 ) ?>
                                             </div>
                                             <input type="hidden" class="form-control" value="<?= htmlspecialchars(
-                                                ($data['tglPeminjamanBrg'] instanceof DateTime)
-                                                    ? $data['tglPeminjamanBrg']->format('d-m-Y')
-                                                    : $data['tglPeminjamanBrg']
-                                            ) ?>">
+                                                                                                    ($data['tglPeminjamanBrg'] instanceof DateTime)
+                                                                                                        ? $data['tglPeminjamanBrg']->format('d-m-Y')
+                                                                                                        : $data['tglPeminjamanBrg']
+                                                                                                ) ?>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Alasan Peminjaman</label>
+                                            <div class="form-control-plaintext"><?= nl2br(htmlspecialchars($data['alasanPeminjamanBrg'])) ?></div>
+                                            <textarea class="form-control" rows="3" hidden><?= htmlspecialchars($data['alasanPeminjamanBrg']) ?></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">ID Barang</label>
+                                            <div class="form-control-plaintext"><?= htmlspecialchars($data['idBarang']) ?></div>
+                                            <input type="hidden" class="form-control" value="<?= htmlspecialchars($data['idBarang']) ?>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Nama Barang</label>
+                                            <div class="form-control-plaintext"><?= htmlspecialchars($data['namaBarang']) ?></div>
+                                            <input type="hidden" class="form-control" value="<?= htmlspecialchars($data['namaBarang']) ?>">
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label fw-semibold">Jumlah Barang</label>
@@ -133,13 +140,6 @@ if (isset($_GET['idPeminjamanBrg'])) {
                                             ?>
                                             <div class="form-control-plaintext <?= $statusClass ?>"><?= htmlspecialchars($data['statusPeminjaman']) ?></div>
                                             <input type="hidden" class="form-control" value="<?= htmlspecialchars($data['statusPeminjaman']) ?>">
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">Alasan Peminjaman</label>
-                                            <div class="form-control-plaintext"><?= nl2br(htmlspecialchars($data['alasanPeminjamanBrg'])) ?></div>
-                                            <textarea class="form-control" rows="3" hidden><?= htmlspecialchars($data['alasanPeminjamanBrg']) ?></textarea>
                                         </div>
                                     </div>
                                 </div>

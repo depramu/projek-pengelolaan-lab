@@ -1,9 +1,9 @@
 <?php
-require_once '../../auth.php';
+require_once __DIR__ . '/../../function/auth.php';
 authorize_role('PIC Aset');
 
 include '../../templates/header.php';
-include '../../koneksi.php';
+require_once '../../koneksi.php';
 
 $idPeminjamanBrg = $_GET['id'] ?? '';
 $data = null; // Inisialisasi $data sebagai null
@@ -115,7 +115,7 @@ include '../../templates/sidebar.php';
                                     </div>
                                     <div class="mb-2">
                                         <label for="tglPeminjamanBrg" class="form-label fw-semibold">Tanggal Peminjaman</label>
-                                        <div class="form-control-plaintext"><?= isset($data['tglPeminjamanBrg']) ? htmlspecialchars($data['tglPeminjamanBrg']->format('Y-m-d')) : '' ?></div>
+                                        <div class="form-control-plaintext"><?= isset($data['tglPeminjamanBrg']) ? htmlspecialchars($data['tglPeminjamanBrg']->format('d-m-y')) : '' ?></div>
                                         <input type="hidden" class="form-control" id="tglPeminjamanBrg" name="tglPeminjamanBrg" value="<?= isset($data['tglPeminjamanBrg']) ? htmlspecialchars($data['tglPeminjamanBrg']->format('Y-m-d')) : '' ?>">
                                     </div>
                                     <div class="mb-2">

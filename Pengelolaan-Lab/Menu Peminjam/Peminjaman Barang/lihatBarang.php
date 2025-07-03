@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../../function/auth.php';
+authorize_role(['Peminjam']);
+
 include '../../templates/header.php';
 
 // Pagination setup

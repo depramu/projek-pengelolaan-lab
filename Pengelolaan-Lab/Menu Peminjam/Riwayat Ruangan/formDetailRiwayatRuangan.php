@@ -1,8 +1,11 @@
 <?php
-$showModal = false;
+require_once __DIR__ . '/../../function/auth.php';
+authorize_role(['Peminjam']);
+
 include '../../templates/header.php';
 include '../../templates/sidebar.php';
 
+$showModal = false;
 $data = null;
 $error_message = null;
 
@@ -23,9 +26,12 @@ if ($idPeminjamanRuangan !== null) {
                 p.alasanPeminjamanRuangan, p.statusPeminjaman,
                 peng.dokumentasiSebelum, peng.dokumentasiSesudah,
                 tolak.alasanPenolakan,
+                r.namaRuangan,
                 COALESCE(m.nama, k.nama) AS namaPeminjam
             FROM 
                 Peminjaman_Ruangan p
+            JOIN 
+                Ruangan r ON p.idRuangan = r.idRuangan
             LEFT JOIN 
                 Pengembalian_Ruangan peng ON p.idPeminjamanRuangan = peng.idPeminjamanRuangan
             LEFT JOIN 
@@ -83,39 +89,49 @@ if ($idPeminjamanRuangan !== null) {
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label fw-bold">ID Peminjaman</label>
+                                            <label class="form-label fw-semibold">ID Peminjaman</label>
                                             <div class="form-control-plaintext"><?= htmlspecialchars($data['idPeminjamanRuangan']) ?></div>
                                             <input type="hidden" name="idPeminjamanRuangan" class="form-control" value="<?= htmlspecialchars($data['idPeminjamanRuangan']) ?>">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label fw-bold">NIM / NPK</label>
+                                            <label class="form-label fw-semibold">NIM / NPK</label>
                                             <div class="form-control-plaintext"><?= htmlspecialchars($data['nim'] ?? $data['npk'] ?? '-') ?></div>
                                             <input type="hidden" class="form-control" value="<?= htmlspecialchars($data['nim'] ?? $data['npk'] ?? '-') ?>">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label fw-bold">Ruangan</label>
-                                            <div class="form-control-plaintext"><?= htmlspecialchars($data['idRuangan']) ?></div>
-                                            <input type="hidden" class="form-control" value="<?= htmlspecialchars($data['idRuangan']) ?>">
+                                            <label class="form-label fw-semibold">Tanggal Peminjaman</label>
+                                            <div class="form-control-plaintext"><?= htmlspecialchars($data['tglPeminjamanRuangan'] instanceof DateTime)  ? $data['tglPeminjamanRuangan']->format('d-m-y') : '' ?></div>
+                                            <input type="hidden" class="form-control" value="<?= ($data['tglPeminjamanRuangan'] instanceof DateTime) ? $data['tglPeminjamanRuangan']->format('d-m-y') : '' ?>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Alasan Peminjaman</label>
+                                            <div class="form-control-plaintext"><?= htmlspecialchars($data['alasanPeminjamanRuangan']) ?></div>
+                                            <textarea class="form-control" rows="3" hidden><?= htmlspecialchars($data['alasanPeminjamanRuangan']) ?></textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label fw-bold">Tanggal Peminjaman</label>
-                                            <div class="form-control-plaintext"><?= htmlspecialchars($data['tglPeminjamanRuangan'] instanceof DateTime)  ? $data['tglPeminjamanRuangan']->format('d F Y') : '' ?></div>
-                                            <input type="hidden" class="form-control" value="<?= ($data['tglPeminjamanRuangan'] instanceof DateTime) ? $data['tglPeminjamanRuangan']->format('d F Y') : '' ?>">
+                                            <label class="form-label fw-semibold">ID Ruangan</label>
+                                            <div class="form-control-plaintext"><?= htmlspecialchars($data['idRuangan']) ?></div>
+                                            <input type="hidden" class="form-control" value="<?= htmlspecialchars($data['idRuangan']) ?>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Nama Ruangan</label>
+                                            <div class="form-control-plaintext"><?= htmlspecialchars($data['namaRuangan']) ?></div>
+                                            <input type="hidden" class="form-control" value="<?= htmlspecialchars($data['namaRuangan']) ?>">
                                         </div>
                                         <div class="mb-3">
                                             <div class="row">
-                                                <div class="col-6"> <label class="form-label fw-bold">Waktu Mulai:</label>
+                                                <div class="col-6"> <label class="form-label fw-semibold">Waktu Mulai:</label>
                                                     <p class="form-control-plaintext"><?= htmlspecialchars($data['waktuMulai'] instanceof DateTime ? $data['waktuMulai']->format('H:i') : '') ?></p>
                                                 </div>
-                                                <div class="col-6"> <label class="form-label fw-bold">Waktu Selesai:</label>
+                                                <div class="col-6"> <label class="form-label fw-semibold">Waktu Selesai:</label>
                                                     <p class="form-control-plaintext"><?= htmlspecialchars($data['waktuSelesai'] instanceof DateTime ? $data['waktuSelesai']->format('H:i') : '') ?></p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label fw-bold">Status Peminjaman</label>
+                                            <label class="form-label fw-semibold">Status Peminjaman</label>
                                             <?php
                                             $statusClass = 'text-secondary';
                                             switch ($data['statusPeminjaman']) {
@@ -140,13 +156,6 @@ if ($idPeminjamanRuangan !== null) {
                                             <input type="hidden" class="form-control" value="<?= htmlspecialchars($data['statusPeminjaman']) ?>">
                                         </div>
                                     </div>
-                                    <div class="col-12">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">Alasan Peminjaman</label>
-                                            <div class="form-control-plaintext"><?= htmlspecialchars($data['alasanPeminjamanRuangan']) ?></div>
-                                            <textarea class="form-control" rows="3" hidden><?= htmlspecialchars($data['alasanPeminjamanRuangan']) ?></textarea>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <?php if (in_array($data['statusPeminjaman'], ['Ditolak', 'Sedang Dipinjam', 'Menunggu Pengecekan', 'Telah Dikembalikan'])) : ?>
@@ -154,14 +163,14 @@ if ($idPeminjamanRuangan !== null) {
                                     <?php if ($data['statusPeminjaman'] == 'Ditolak') : ?>
                                         <h6 class=" mb-3">DETAIL PENOLAKAN</h6>
                                         <div class="mt-3">
-                                            <label class="form-label fw-bold">Alasan Penolakan dari PIC</label>
+                                            <label class="form-label fw-semibold">Alasan Penolakan dari PIC</label>
                                             <textarea class="form-control" rows="3"><?= htmlspecialchars($data['alasanPenolakan'] ?? 'Tidak ada alasan spesifik.') ?></textarea>
                                         </div>
                                     <?php else: ?>
                                         <h6 class=" mb-3">DOKUMENTASI PEMAKAIAN</h6>
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-bold">
+                                                <label class="form-label fw-semibold">
                                                     Dokumentasi Sebelum
                                                     <span id="dokSebelumError" class="text-danger ms-2 fw-normal" style="font-size: 0.875em;"></span>
                                                 </label>
@@ -179,7 +188,7 @@ if ($idPeminjamanRuangan !== null) {
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-bold">
+                                                <label class="form-label fw-semibold">
                                                     Dokumentasi Selesai
                                                     <span id="dokSesudahError" class="text-danger ms-2 fw-normal" style="font-size: 0.875em;"></span>
                                                 </label>
@@ -215,9 +224,7 @@ if ($idPeminjamanRuangan !== null) {
 </main>
 
 
-<?php 
+<?php
 include '../../templates/footer.php';
 
 ?>
-
-

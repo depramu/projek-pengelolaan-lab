@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../../function/auth.php';
+authorize_role(['Peminjam']);
+
 include '../../templates/header.php';
 
 $idRuangan = $_GET['idRuangan'] ?? null;
@@ -35,8 +38,8 @@ if ($stmtId && $rowId = sqlsrv_fetch_array($stmtId, SQLSRV_FETCH_ASSOC)) {
 
 $showModal = false;
 $error = null;
-$nim = $_SESSION['nim'] ?? null;
-$npk = $_SESSION['npk'] ?? null;
+$nim = $_SESSION['nim'] ?? '-';
+$npk = $_SESSION['npk'] ?? '-';
 
 // Ambil data dari session
 $tglPeminjamanRuangan = $_SESSION['tglPeminjamanRuangan'] ?? null; // Format: d-m-Y
@@ -49,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($alasanPeminjamanRuangan)) {
         $error = "Alasan peminjaman ruangan tidak boleh kosong";
     } else {
-        $tglForSQL = DateTime::createFromFormat('d-m-Y', $tglPeminjamanRuangan)->format('Y-m-d');
+        $tglForSQL = DateTime::createFromFormat('d-m-Y', $tglPeminjamanRuangan)->format('d-m-y');
         $waktuMulaiForSQL = DateTime::createFromFormat('H:i', $waktuMulai)->format('H:i:s');
         $waktuSelesaiForSQL = DateTime::createFromFormat('H:i', $waktuSelesai)->format('H:i:s');
 

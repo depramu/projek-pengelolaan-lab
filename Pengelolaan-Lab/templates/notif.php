@@ -1,7 +1,7 @@
 <?php
 session_start();
-include 'templates/header.php';
-include 'templates/sidebar.php';
+include 'header.php';
+include 'sidebar.php';
 
 $notifikasi = isset($_SESSION['notifikasi']) ? $_SESSION['notifikasi'] : [];
 
@@ -24,7 +24,7 @@ $notifikasi = array_filter(
 ?>
 
 <main class="col bg-white px-3 px-md-4 py-3 position-relative">
-<h3 class="fw-semibold mb-3">Notifikasi</h3>
+    <h3 class="fw-semibold mb-3">Notifikasi</h3>
     <div class="mb-5">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -34,24 +34,24 @@ $notifikasi = array_filter(
         </nav>
     </div>
     <div class="container">
-                    <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Waktu</th>
-                                <th>Pesan</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Waktu</th>
+                        <th>Pesan</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($notifikasi as $row): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($row['waktu']) ?></td>
-                                <td><?= htmlspecialchars($row['pesan']) ?></td>
-                                <td><?= htmlspecialchars($row['status']) ?></td>
-                                <td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($notifikasi as $row): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($row['waktu']) ?></td>
+                            <td><?= htmlspecialchars($row['pesan']) ?></td>
+                            <td><?= htmlspecialchars($row['status']) ?></td>
+                            <td>
                                 <?php if ($row['status'] == 'Belum Dibaca'): ?>
                                     <form method="POST" style="display:inline;">
                                         <input type="hidden" name="notif_id" value="<?= $row['id']; ?>">
@@ -60,16 +60,16 @@ $notifikasi = array_filter(
                                         </button>
                                     </form>
                                 <?php endif; ?>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
 
 </main>
 </div>
 </div>
 
 <?php
-include 'templates/footer.php';
+include 'footer.php';
 ?>

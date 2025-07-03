@@ -23,7 +23,7 @@ function renderSidebarMenu($role, $isPeminjam, $currentPage)
             'peminjamanBarang.php', 
             'peminjamanRuangan.php', 
             'detailPeminjamanBarang.php', 
-            'detailPeminjamanRuangan.php', 
+            'detailPeminjamanRuangan.php',  
             'pengembalianBarang.php', 
             'pengembalianRuangan.php',
             'pengajuanBarang.php',
